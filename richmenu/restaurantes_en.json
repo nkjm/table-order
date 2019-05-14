@@ -1,0 +1,63 @@
+{
+    "size": {
+      "width": 2500,
+      "height": 1686
+    },
+    "selected": true,
+    "name": "Select Restaurante",
+    "chatBarText": "Restaurantes",
+    "areas": [
+      {
+        "bounds": {
+          "x": 8,
+          "y": 12,
+          "width": 611,
+          "height": 607
+        },
+        "action": {
+          "type": "postback",
+          "displayText": "Inaba Udon",
+          "data": "{\"_type\":\"intent\",\"language\":\"en\",\"intent\":{\"name\":\"switch-restaurante\",\"parameters\":{\"restaurante\":\"Inaba Udon\"}}}"
+        }
+      },
+      {
+        "bounds": {
+          "x": 644,
+          "y": 12,
+          "width": 598,
+          "height": 607
+        },
+        "action": {
+          "type": "postback",
+          "displayText": "Hakata Curry Lab",
+          "data": "{\"_type\":\"intent\",\"language\":\"en\",\"intent\":{\"name\":\"switch-restaurante\",\"parameters\":{\"restaurante\":\"Hakata Curry Lab\"}}}"
+        }
+      },
+      {
+        "bounds": {
+          "x": 1431,
+          "y": 1354,
+          "width": 973,
+          "height": 223
+        },
+        "action": {
+          "type": "postback",
+          "displayText": "日本語に切り替え",
+          "data": "{\"_type\":\"intent\",\"language\":\"ja\",\"intent\":{\"name\":\"switch-language\",\"parameters\":{\"language\":\"ja\"}}}"
+        }
+      },
+      {
+        "bounds": {
+          "x": 9,
+          "y": 646,
+          "width": 607,
+          "height": 604
+        },
+        "action": {
+          "type": "postback",
+          "displayText": "B.B.Quisine",
+          "data": "{\"_type\":\"intent\",\"language\":\"en\",\"intent\":{\"name\":\"switch-restaurante\",\"parameters\":{\"restaurante\":\"B.B.Quisine\"}}}"
+        }
+      }
+    ]
+  }

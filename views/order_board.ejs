@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html ng-app="foodcourt">
+    <head>
+        <title>Order board</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="/css/bootstrap.min.css">
+        <script defer src="https://use.fontawesome.com/releases/v5.4.2/js/all.js" integrity="sha384-wp96dIgDl5BLlOXb4VMinXPNiB32VYBSoXOoiARzSTXY+tsK8yDTYfvdTyqzdGGN" crossorigin="anonymous"></script>
+        <style>
+            .box-shadow { box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05); }
+            .table-borderless td, .table-borderless th {
+                border: none;
+            }
+            .btn-circle.btn-xl {
+                width: 90px;
+                height: 90px;
+                padding: 22px 20px;
+                border-radius: 45px;
+                font-size: 32px;
+                line-height: 1.33;
+                margin-right: 8px;
+                margin-left: 8px;
+            }
+            .btn-circle {
+                width: 30px;
+                height: 30px;
+                padding: 6px 0px;
+                border-radius: 15px;
+                text-align: center;
+                font-size: 12px;
+                line-height: 1.42857;
+            }
+            .order-card.ng-hide-add,
+            .order-card.ng-hide-remove {
+                -webkit-transition : 1s ease-in-out opacity;
+                -moz-transition    : 1s ease-in-out opacity;
+                -ms-transition     : 1s ease-in-out opacity;
+                -o-transition      : 1s ease-in-out opacity;
+                transition         : 1s ease-in-out opacity;
+                opacity            : 1;
+            }
+            .order-card.ng-hide {
+                opacity : 0;
+            }
+        </style>
+        <script src="https://www.gstatic.com/firebasejs/5.5.6/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/5.5.6/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/5.5.6/firebase-firestore.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/ui/3.4.1/firebase-ui-auth__ja.js"></script>
+        <script type="text/javascript" src="/js/angular.min.js"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.0/angular-animate.min.js"></script>
+        <script type="text/javascript" src="/bower_components/moment/min/moment-with-locales.min.js"></script>
+        <script type="text/javascript" src="/js/module.js"></script>
+        <script type="text/javascript" src="/js/order_board_ctl.js"></script>
+        <script>
+            angular.module("foodcourt")
+            .constant("GOOGLE_PROJECT_ID", "<%= google_project_id %>")
+            .constant("FIREBASE_API_KEY", "<%= firebase_api_key %>")
+            .constant("FIREBASE_MESSAGING_SENDER_ID", "<%= firebase_messaging_sender_id %>")
+            .constant("RESTAURANTE_ID", "<%= restaurante_id %>");
+        </script>
+    </head>
+    <body ng-controller="rootCtl">
+
+        <div class="container-fluid" style="width: 90%; margin-top: 20px; margin-bottom: 40px;">
+            <div class="alert alert-{{alert.severity}}" ng-repeat="alert in ui.alert_list" style="margin-bottom: 10px;" ng-cloak>
+                {{alert.message}}
+            </div>
+            <nav class="nav nav-tabs">
+                <a ng-repeat="tab in ui.tab_list" class="nav-item nav-link" ng-class="(ui.current_tab.status == tab.status) ? 'active' : ''" ng-click="ui.current_tab = tab" href="#" ng-cloak>{{tab.label}} <span class="badge badge-light">{{tab.order_list.length}}</span></a>
+            </nav>
+            <div class="row" style="margin-top: 20px;">
+                <div class="col-md-4" style="margin-bottom: 20px;" ng-repeat="order in ui.current_tab.order_list" class="fade">
+                    <div class="card box-shadow order-card" ng-hide="order.hide" ng-cloak>
+                        <div style="position:absolute; width: 100%;" ng-show="ui.current_tab.deletable">
+                            <div style="position:absolute; width: 100%; text-align: right; top: -15px; right: -15px;">
+                                <a class="btn btn-danger btn-circle" ng-click="update_order_status(order.id, 'deleted', true)" href="#" >
+                                    <i class="fas fa-times"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div style="text-align:center; margin-bottom: 30px;">
+                                <div>受付番号</div>
+                                <h1 style="font-size: 4em;">{{order.id.split("-")[1]}}</h1>
+                                <div>
+                                    <span class="badge badge-light" style="font-size: 1.0em;">{{order.formatted_paid_at}}</span>
+                                </div>
+                            </div>
+                            <table class="table table-sm table-borderless" style="margin-bottom: 30px; font-size: 1.2em;">
+                                <tbody>
+                                    <tr ng-repeat="order_item in order.item_list">
+                                        <td>{{order_item.label}}</th>
+                                        <td style="text-align: right;"><span style="font-weight: bold;">{{order_item.quantity}}</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div style="text-align: center;">
+                                <a ng-repeat="button in ui.current_tab.button_list" title="{{button.label}}" ng-click="update_order_status(order.id, button.to_status, button.update_timestamp)" href="#" class="btn btn-{{button.style || 'primary'}} btn-circle btn-xl">
+                                    <i class="fas fa-{{button.icon}}"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
