@@ -1,42 +1,29 @@
 "use strict";
 
 const debug = require("debug")("bot-express:skill");
-const restaurante = require("../service/restaurante");
 const parser = require("../parser/order");
+const ServiceDb = require("../service/db");
+const db = new ServiceDb();
+const translate = require("../service/translate");
 
 module.exports = class SkillOrder {
     async begin(bot, event, context){
-        context.confirmed.order_item_list = [];
-        context.confirmed.restaurante_list = await restaurante.list(context.sender_language);
+        // Retrieve menu from db.
+        context.confirmed.menu_list = translate(db.list("menu"), context.sender_language || "ja");
     }
 
     constructor(){
         this.clear_context_on_finish = true;
 
         this.required_parameter = {
-            restaurante: {
-                message_to_confirm: async (bot, event, context) => {
-                    let message = await bot.m.text_with_qr({
-                        message_text: await bot.t("pls_select_restaurante"),
-                        action_text_list: Array.from(context.confirmed.restaurante_list, restaurante => restaurante.label)
-                    })
-                    return message;
+            order_item_list: {
+                list: {
+                    order: "old"
                 },
-                parser: async (value, bot, event, context) => {
-                    const restaurante = context.confirmed.restaurante_list.find(restaurante => restaurante.label === value);
-                    
-                    if (!restaurante){
-                        throw new Error("invalid_value");
-                    }
-
-                    return restaurante;
-                }
-            },
-            order_item: {
                 message_to_confirm: async (bot, event, context) => {
                     let order_item_message = await bot.m.order_item({
                         message_text: await bot.t(`may_i_have_your_order`), 
-                        menu_list: context.confirmed.restaurante.menu
+                        menu_list: context.confirmed.menu_list
                     });
 
                     let message_list = [{
@@ -80,53 +67,6 @@ module.exports = class SkillOrder {
                     }
                 }
             },
-            /*
-            anything_else: {
-                message_to_confirm: async (bot, event, context) => {
-                    let message = await bot.m.multi_button({
-                        message_text: `${await bot.t("got_x_item", {
-                            item_label: context.confirmed.order_item_list[0].label,
-                            number: context.confirmed.order_item_list[0].quantity
-                        })}\n${await bot.t("anything_else")}`,
-                        action_list: [{
-                            type: "message",
-                            label: await bot.t(`add`),
-                            text: await bot.t(`add`)
-                        },{
-                            type: "message",
-                            label: await bot.t(`thats_it`),
-                            text: await bot.t(`thats_it`)
-                        }]
-                    })
-                    return message;
-                },
-                parser: async (value, bot, event, context) => {
-                    if (typeof value == "string"){
-                        if ([`${await bot.t("add")}`, `${await bot.t("thats_it")}`].includes(value)){
-                            return value;
-                        }
-                    }
-
-                    return parser.order_item(value, bot, event, context);
-                },
-                reaction: async (error, value, bot, event, context) => {
-                    if (error) return;
-
-                    if (typeof value == "string"){
-                        if (value == await bot.t(`thats_it`)){
-                            debug("Just go to review.");
-                        } else if (value == await bot.t(`add`)){
-                            bot.collect("anything_else");
-                            bot.collect("order_item");
-                        }
-                    } else if (typeof value == "object"){
-                        bot.collect("anything_else");
-
-                        await bot.apply_parameter("order_item", value);
-                    }
-                }
-            },
-            */
             review_order_item_list: {
                 message_to_confirm: async (bot, event, context) => {
                     let message;
@@ -244,7 +184,7 @@ module.exports = class SkillOrder {
             total_amount += order_item.amount;
         }
 
-        // Save reservation so taht confirm URL can retrieve this information. *Restaurante info will be downsized.
+        // Save reservation so taht confirm URL can retrieve this information. *restaurant info will be downsized.
         const order_id = await db.create("order", {
             // Common fields
             created_at: new Date(),
@@ -253,7 +193,7 @@ module.exports = class SkillOrder {
             // Application fields
             amount: total_amount,
             item_list: context.confirmed.order_item_list,
-            restaurante_id: context.confirmed.restaurante.id
+            restaurant_id: context.confirmed.restaurant.id
         })
 
         // Start select_payment_method skill.

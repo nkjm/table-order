@@ -19,7 +19,7 @@ db.settings({
     timestampsInSnapshots: true
 });
 
-class ServiceRestauranteFirestore {
+class ServiceRestaurantFirestore {
     /**
      * @constructor
      */
@@ -28,9 +28,9 @@ class ServiceRestauranteFirestore {
     }
 
     /**
-     * Get restaurante.
+     * Get restaurant.
      * @param {String} restaurante_id 
-     * @return {Object} restaurante
+     * @return {Object} restaurant
      */
     async get(restaurante_id){
         let doc = await db.collection("restaurants").doc(restaurante_id).get();
@@ -42,8 +42,8 @@ class ServiceRestauranteFirestore {
     }
 
     /**
-     * Get restaurante list
-     * @return {Array.<restaurante>}
+     * Get restaurant list
+     * @return {Array.<restaurant>}
      */
     async list(){
         let restaurante_list = [];
@@ -105,4 +105,4 @@ class ServiceRestauranteFirestore {
     }
 }
 
-module.exports = new ServiceRestauranteFirestore();
+module.exports = new ServiceRestaurantFirestore();

@@ -39,15 +39,15 @@ module.exports = {
     },
     your_order_is_ready: {
         ja: (options) => {
-            return `ご注文のお料理がご用意できました。${options.restaurante}のカウンターまでお越しください。`
+            return `ご注文のお料理がご用意できました。${options.restaurant}のカウンターまでお越しください。`
         },
         en: (options) => {
-            return `Your order is ready. Please come to ${options.restaurante} and pick it up.`
+            return `Your order is ready. Please come to ${options.restaurant} and pick it up.`
         }
     },
-    pls_select_restaurante: {
+    pls_select_restaurant: {
         ja: `レストランを選択してください。`,
-        en: `Please select restaurante.`
+        en: `Please select restaurant.`
     },
     follow_message: {
         ja: `ご注文いただくにはまずレストランを選択してください。`,

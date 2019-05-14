@@ -2,10 +2,10 @@
 
 const debug = require("debug")("bot-express:parser");
 
-class ParserOrder {
+module.exports = class ParserOrder {
     static async order_item(value, bot, event, context){
         if (typeof value == "string"){
-            let menu = context.confirmed.restaurante.menu.find(menu => menu.label === value);
+            let menu = context.confirmed.menu_list.find(menu => menu.label === value);
             if (menu){
                 return {
                     label: menu.label,
@@ -19,7 +19,7 @@ class ParserOrder {
         } else if (typeof value == "object" && value.data){
             let order_item = JSON.parse(value.data);
             if (order_item.label){
-                let menu = context.confirmed.restaurante.menu.find(menu => menu.label === order_item.label);
+                let menu = context.confirmed.menu_list.find(menu => menu.label === order_item.label);
                 if (menu){
                     if (order_item.quantity){
                         return {
@@ -43,5 +43,3 @@ class ParserOrder {
         throw new Error("invalid_value");
     }
 }
-
-module.exports = ParserOrder;

@@ -91,7 +91,7 @@ class ServiceFlex {
     async order_ready_message(order){
         let message = {
             type: "flex",
-            altText: await t.t("your_order_is_ready", {restaurante: order.restaurante.label}),
+            altText: await t.t("your_order_is_ready", {restaurant: order.restaurant.label}),
             contents: {
                 type: "bubble",
                 body: {
@@ -114,7 +114,7 @@ class ServiceFlex {
                         type: "separator"
                     },{
                         type: "text",
-                        text: await t.t("your_order_is_ready", {restaurante: order.restaurante.label}),
+                        text: await t.t("your_order_is_ready", {restaurant: order.restaurant.label}),
                         wrap: true
                     }]
                 }
