@@ -72,6 +72,12 @@ server.use("/bot/webhook", bot_express({
 }));
 
 /**
+ * Mount LIFF
+ */
+const routes_liff = require("./routes/liff");
+server.use("/liff", routes_liff);
+
+/**
  * Mount LINE Pay
  */
 const routes_line_pay = require("./routes/line_pay");
