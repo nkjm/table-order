@@ -44,10 +44,5 @@ module.exports = class SkillAfterPay {
         }
 
         await bot.reply(message);
-
-        // Link richmenu.
-        if (process.env.BOT_EXPRESS_ENV !== "test"){
-            await bot.line.sdk.linkRichMenuToUser(bot.extract_sender_id(), process.env.RICHMENU_DEFAULT);
-        }
     }
 }
