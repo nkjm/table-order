@@ -1,5 +1,6 @@
 "use strict";
 
+const debug = require("debug")("bot-express:message")
 const Message = require("./message");
 
 module.exports = class MessageAfterPay extends Message {
