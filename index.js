@@ -65,8 +65,10 @@ server.use("/bot/webhook", bot_express({
         }
     },
     skill: {
-        default: process.env.DEFAULT_SKILL
-    }
+        default: process.env.DEFAULT_SKILL,
+        follow: "follow"
+    },
+    modify_previous_parameter_intent: "modify_previous_parameter"
 }));
 
 /**
