@@ -1,7 +1,5 @@
 "use strict";
 
-import "./component/liff.min.js";
-
 var stripe = Stripe(api_key);
 
 liff.init(

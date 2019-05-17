@@ -20,7 +20,7 @@ class ServiceLineEvent {
         let url = `http://localhost:${process.env.PORT || 5000}/bot/webhook`;
 
         let body = {events: [event]};
-        let signature = crypto.createHmac('sha256', process.env.LINE_CHANNEL_SECRET).update(JSON.stringify(body)).digest('base64');
+        let signature = crypto.createHmac('sha256', process.env.LINE_BOT_CHANNEL_SECRET).update(JSON.stringify(body)).digest('base64');
         let headers = {"X-Line-Signature": signature};
         return request.postAsync({
             url: url,
