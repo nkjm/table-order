@@ -9,7 +9,7 @@ const translate = require("../service/translate");
 module.exports = class SkillOrder {
     async begin(bot, event, context){
         // Retrieve menu from db.
-        context.confirmed.menu_list = translate(db.list("menu"), context.sender_language || "ja");
+        context.confirmed.menu_list = translate(await db.list("menu"), context.sender_language || "ja");
     }
 
     constructor(){
@@ -18,53 +18,68 @@ module.exports = class SkillOrder {
         this.required_parameter = {
             order_item_list: {
                 list: {
-                    order: "old"
+                    order: "new"
                 },
-                message_to_confirm: async (bot, event, context) => {
-                    let order_item_message = await bot.m.order_item({
-                        message_text: await bot.t(`may_i_have_your_order`), 
-                        menu_list: context.confirmed.menu_list
-                    });
+                property: {
+                    label: {
+                        message_to_confirm: async (bot, event, context) => {
+                            let order_item_message = await bot.m.order_item({
+                                message_text: await bot.t(`may_i_have_your_order`), 
+                                menu_list: context.confirmed.menu_list
+                            });
 
-                    let message_list = [{
-                        type: "text",
-                        text: await bot.t(`pls_select_order`)
-                    }, order_item_message];
+                            let message_list = [{
+                                type: "text",
+                                text: await bot.t(`pls_select_order`)
+                            }, order_item_message];
 
-                    return message_list;
+                            return message_list;
+                        },
+                        parser: async (value, bot, event, context) => {
+                            const label_type_list = Array.from(context.confirmed.menu_list, menu => menu.label);
+                            return bot.builtin_parser.list.parse(value, {
+                                list: label_type_list
+                            })
+                        }
+                    },
+                    quantity: {
+                        message_to_confirm: async (bot, event, context) => {
+                            let message = await bot.m.text_with_qr({
+                                message_text: await bot.t("pls_tell_me_quantity_of_the_item", { label: context.confirming_property.confirmed.label }),
+                                action_text_list: ["5", "6", "7", "8", "9", "10"]
+                            });
+
+                            message = await bot.m.qr_add_modify_prev_param(message, context);
+
+                            return message;
+                        },
+                        parser: {
+                            type: "number"
+                        }
+                    }
                 },
-                parser: parser.order_item,
                 reaction: async (error, value, bot, event, context) => {
-                    if (error) return;
+                    const deduped_order_item_list = [];
 
-                    // If there is the same menu in order item list, we move the order item to top of the list and increment the quantity if it is set in value.
-                    let is_existing = false;
-                    let i = 0;
-                    for (let order_item of context.confirmed.order_item_list){
-                        if (order_item.label == value.label){
-                            is_existing = true;
-                            let order_item_to_increment_quantity = context.confirmed.order_item_list.splice(i, 1)[0];
-                            context.confirmed.order_item_list.unshift(order_item_to_increment_quantity);
-
-                            if (value.quantity){
-                                context.confirmed.order_item_list[0].quantity += value.quantity;
+                    // Dedup order_item_list and set image, unit_price and amount.
+                    if (Array.isArray(context.confirmed.order_item_list)){
+                        for (const order_item of context.confirmed.order_item_list){
+                            const deduped_order_item = deduped_order_item_list.find(deduped_order_item => deduped_order_item.label === order_item.label);
+                            // If duplication found, we merge them and increment quantity.
+                            if (deduped_order_item){
+                                debug(`This is duplicated item. We merge and increment quantity.`);
+                                deduped_order_item.quantity += order_item.quantity;
+                                deduped_order_item.amount = deduped_order_item.unit_price * deduped_order_item.quantity;
+                            } else {
+                                order_item.image = context.confirmed.menu_list.find(menu => menu.label === order_item.label).image
+                                order_item.unit_price = context.confirmed.menu_list.find(menu => menu.label === order_item.label).price
+                                order_item.amount = order_item.unit_price * order_item.quantity;
+                                deduped_order_item_list.push(order_item);
                             }
                         }
-                        i++;
                     }
 
-                    if (!is_existing){
-                        // This is new item so we just add it to top of the order item list.
-                        context.confirmed.order_item_list.unshift(value);
-                    }
-
-                    // Calculate amount. It can be 0 since quantity may be 0 but will be set in reaction of quantity.
-                    context.confirmed.order_item_list[0].amount = context.confirmed.order_item_list[0].quantity * context.confirmed.order_item_list[0].unit_price;
-
-                    // If order item does not include quantity, we ask it.
-                    if (!value.quantity){
-                        bot.collect("quantity");
-                    }
+                    context.confirmed.order_item_list = deduped_order_item_list;
                 }
             },
             review_order_item_list: {
@@ -99,15 +114,26 @@ module.exports = class SkillOrder {
                     if (error) return;
 
                     if (value == await bot.t(`remove`)){
-                        debug(`We will cancel some order item.`);
+                        if (!(Array.isArray(context.confirmed.order_item_list) && context.confirmed.order_item_list.length > 0)){
+                            bot.collect("review_order_item_list");
+                            return
+                        }
+                        debug(`We will remove some order item.`);
                         bot.collect("review_order_item_list");
                         bot.collect("order_item_to_remove");
+                        return
                     } else if (value == await bot.t(`add`)){
                         debug(`We will add another order item.`);
                         bot.collect("review_order_item_list");
-                        bot.collect("order_item");
+                        bot.collect("order_item_list");
+                        return
                     } else if (value == await bot.t(`check`)){
+                        if (!(Array.isArray(context.confirmed.order_item_list) && context.confirmed.order_item_list.length > 0)){
+                            bot.collect("review_order_item_list");
+                            return
+                        }
                         debug(`We can proceed to payment.`);
+                        return
                     } else if (value == await bot.t(`quit`)){
                         debug(`We quit order.`);
                         await bot.reply({
@@ -115,59 +141,38 @@ module.exports = class SkillOrder {
                             text: `${await bot.t("certainly")} ${await bot.t("quit_order")}`
                         })
                         bot.init();
+                        return
                     }
                 }
             }
         }
 
         this.optional_parameter = {
-            quantity: {
-                message_to_confirm: async (bot, event, context) => {
-                    let message = {
-                        type: "text",
-                        text: await bot.t(`pls_tell_me_quantity_of_the_item`, {
-                            item_label: context.confirmed.order_item_list[0].label
-                        })
-                    }
-                    return message;
-                },
-                parser: {
-                    type: "number"
-                },
-                reaction: (error, value, bot, event, context) => {
-                    if (error) return;
-
-                    context.confirmed.order_item_list[0].quantity += value;
-                    context.confirmed.order_item_list[0].amount = context.confirmed.order_item_list[0].quantity * context.confirmed.order_item_list[0].unit_price;
-                }
-            },
             order_item_to_remove: {
                 message_to_confirm: async (bot, event, context) => {
-                    let message = await flex.carousel_message("cancel_order_item", await bot.t(`pls_select_order_to_cancel`), context.confirmed.order_item_list);
+                    let message = await bot.m.order_item_to_remove({
+                        message_text: await bot.t(`pls_select_order_to_cancel`), 
+                        order_item_list: context.confirmed.order_item_list
+                    });
                     return message;
                 },
                 parser: async (value, bot, event, context) => {
-                    if (typeof value != "string") throw new Error("should_be_string");
-
-                    let order_item_to_remove = context.confirmed.order_item_list.find(order_item => order_item.label === value);
-
-                    if (!order_item_to_cancel){
-                        throw new Error("invalid_value");
-                    }
-
-                    return order_item_to_remove;
+                    const label_type_list = Array.from(context.confirmed.order_item_list, order_item => order_item.label);
+                    return bot.builtin_parser.list.parse(value, {
+                        list: label_type_list
+                    })
                 },
                 reaction: async (error, value, bot, event, context) => {
                     if (error) return;
 
                     let i = 0;
-                    for (let order_item of context.confirmed.order_item_list){
-                        if (order_item.label === value.label){
-                            let canceled_order_item = context.confirmed.order_item_list.splice(i, 1)[0];
+                    for (const order_item of context.confirmed.order_item_list){
+                        if (order_item.label === value){
+                            let removed_order_item = context.confirmed.order_item_list.splice(i, 1)[0];
                             bot.queue({
                                 type: "text",
                                 text: `${await bot.t("certainly")} ${await bot.t("the_item_has_been_removed", {
-                                    item_label: canceled_order_item.label
+                                    item_label: removed_order_item.label
                                 })}`
                             })
                         }
@@ -192,8 +197,7 @@ module.exports = class SkillOrder {
             language: context.sender_language || "ja",
             // Application fields
             amount: total_amount,
-            item_list: context.confirmed.order_item_list,
-            restaurant_id: context.confirmed.restaurant.id
+            item_list: context.confirmed.order_item_list
         })
 
         // Start select_payment_method skill.

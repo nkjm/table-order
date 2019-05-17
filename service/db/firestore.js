@@ -30,7 +30,7 @@ module.exports = class ServiceDbFirestore {
             databaseURL: `https://${options.project_id}.firebaseio.com`,
             storageBucket: `${options.project_id}.appspot.com`,
             projectId: options.project_id
-        }, "asobuild");
+        });
 
         this.db = firebase_admin.firestore();
     }

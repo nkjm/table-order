@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "node index.js",
-    "test": "mocha --exit"
+    "test": "mocha --exit -t 30000"
   },
   "author": "Kazuki Nakajima",
   "license": "MIT",
@@ -16,17 +16,19 @@
     "@google-cloud/translate": "^1.1.0",
     "blubird": "0.0.1-security",
     "bluebird": "^3.5.1",
-    "bot-express": "^0.5.76",
+    "bot-express": "^0.5.77",
     "debug": "^3.1.0",
     "dialogflow": "^0.6.0",
     "dotenv": "^6.0.0",
     "ejs": "^2.6.1",
     "express": "^4.16.3",
     "firebase-admin": "^6.5.1",
+    "ioredis": "^4.9.3",
     "line-pay": "^1.0.15",
     "moment": "^2.22.2",
     "request": "^2.87.0",
-    "secure-compare": "^3.0.1"
+    "secure-compare": "^3.0.1",
+    "stripe": "^6.34.0"
   },
   "devDependencies": {
     "chai": "^4.1.2",

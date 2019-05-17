@@ -147,10 +147,10 @@ module.exports = {
     },
     pls_tell_me_quantity_of_the_item: {
         ja: (options) => {
-            return `${options.item_label}の数量を教えていただけますか？`
+            return `${options.label}の数量を教えていただけますか？`
         },
         en: (options) => {
-            return `How many ${options.item_label} do you order?`
+            return `How many ${options.label} do you order?`
         }
     },
     the_item_has_been_removed: {

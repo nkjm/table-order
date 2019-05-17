@@ -11,6 +11,125 @@ module.exports = class MessageOrder extends Message {
     /**
      * @method
      * @async
+     * @param {Object} options
+     * @param {String} options.message_text
+     * @param {Array.<Object>} options.order_item_list
+     * @return {FlexMessage}
+     */
+    async order_item_to_remove(options){
+        const o = options;
+
+        const bubble_list = [];
+        for (const order_item of o.order_item_list){
+            bubble_list.push(await this.order_item_to_remove_bubble({
+                order_item:order_item 
+            }));
+        }
+
+        const message = await super.carousel({
+            message_text: o.message_text,
+            bubble_list: bubble_list
+        })
+
+        debug(JSON.stringify(message));
+
+        return message;
+
+    }
+
+    /**
+     * @method
+     * @async
+     * @param {Object} options
+     * @param {Object} options.order_item
+     * @return {FlexBubble}
+     */
+    async order_item_to_remove_bubble(options){
+        const o = options.order_item;
+
+        let bubble = {
+            type: "bubble",
+            hero: {
+                type: "image",
+                url: o.image,
+                size: "full",
+                aspectRatio: "20:13",
+                aspectMode: "cover"
+            },
+            body: {
+                type: "box", // Contains label, quantity and amount.
+                layout: "vertical",
+                spacing: "md",
+                contents: [{
+                    type: "text", // label
+                    text: o.label,
+                    size: "xl",
+                    weight: "bold"
+                },{
+                    type: "separator"
+                },{
+                    type: "box", // Contains quantity and amount.
+                    layout: "horizontal",
+                    spacing: "xl",
+                    contents: [{
+                        type: "box", // quantity.
+                        layout: "baseline",
+                        contents: [{
+                            type: "text",
+                            text: `数量`,
+                            color: "#999999",
+                            size: "sm",
+                            flex: 0
+                        },{
+                            type: "text",
+                            text: `${String(o.quantity)}${await this.t.t("unit")}`,
+                            size: "lg",
+                            align: "end"
+                        }]
+                    },{
+                        type: "separator"
+                    },{
+                        type: "box", // amount.
+                        layout: "baseline",
+                        contents: [{
+                            type: "text",
+                            text: `金額`,
+                            color: "#999999",
+                            size: "sm",
+                            flex: 0
+                        },{
+                            type: "text",
+                            text: `${String(o.amount)}${await this.t.t("yen")}`,
+                            size: "lg",
+                            align: "end"
+                        }]
+                    }]
+                },{
+                    type: "separator"
+                }]
+            },
+            footer: {
+                type: "box", // Contains cancel button
+                layout: "vertical",
+                contents: [{
+                    type: "button",
+                    style: "primary",
+                    color: "#ff0000",
+                    action: {
+                        type: "message",
+                        label: await this.t.t(`remove`),
+                        text: `${o.label}`
+                    }
+                }]
+            }
+        }
+
+        return bubble;
+    }
+
+    /**
+     * @method
+     * @async
      * @param {Array.<order_item>} order_item_list
      * @return {FlexMessageObject}
      */
@@ -179,8 +298,11 @@ module.exports = class MessageOrder extends Message {
                         number: i
                     }),
                     data: JSON.stringify({
-                        label: m.label,
-                        quantity: i
+                        type: "process_parameters",
+                        parameters: {
+                            label: m.label,
+                            quantity: i
+                        }
                     })
                 }
             })
@@ -254,7 +376,10 @@ module.exports = class MessageOrder extends Message {
                             number: quantity_threshold + 1
                         }),
                         data: JSON.stringify({
-                            label: m.label
+                            type: "process_parameters",
+                            parameters: {
+                                label: m.label
+                            }
                         })
                     }
                 }]

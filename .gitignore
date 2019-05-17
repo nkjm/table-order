@@ -6,3 +6,4 @@ deprecated
 .vscode
 .firebaserc
 firebase.json
+dump.rdb
