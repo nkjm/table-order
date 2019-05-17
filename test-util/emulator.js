@@ -71,6 +71,24 @@ module.exports = class TestUtilEmulator {
     }
 
     /**
+     * Method to create follow event.
+     * @method
+     * @param {String|Object} source - Source id or object.
+     */
+    create_follow_event(source){
+        return this.messenger.create_follow_event(source);
+    }
+
+    /**
+     * Method to create unfollow event.
+     * @method
+     * @param {String|Object} source - Source id or object.
+     */
+    create_unfollow_event(source){
+        return this.messenger.create_unfollow_event(source);
+    }
+
+    /**
     Method to create unsupported event.
     @method
     @param {String|Object} source - Source id or object.
@@ -115,5 +133,36 @@ module.exports = class TestUtilEmulator {
     */
     _create_header(body){
         return this.messenger.create_header(body);
+    }
+
+    /**
+     * Method to get channel access token
+     * @param {String} client_id 
+     * @param {String} channel_secret 
+     */
+    async get_access_token(client_id, channel_secret){
+        const url = `https://api.line.me/v2/oauth/accessToken`;
+        const form = {
+            grant_type: "client_credentials",
+            client_id: client_id,
+            client_secret: channel_secret
+        }
+    
+        const response = await request.postAsync({
+            url: url,
+            form: form
+        })
+    
+        if (response.statusCode != 200){
+            throw new Error(`Failed to retrieve token for LINE Messaging API. Status code: ${response.statusCode}.`);
+        }
+    
+        const body = JSON.parse(response.body);
+    
+        if (!body.access_token){
+            throw new Error(`access_token not found in response.`);
+        }
+    
+        return body.access_token;
     }
 }

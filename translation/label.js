@@ -25,6 +25,9 @@ module.exports = {
     pls_select_payment_method: {
         ja: "お支払い方法を選択してください。"
     },
+    pls_pay_by_line_pay: {
+        ja: "LINE Payでお支払いください。"
+    },
     please_input_credit_card: {
         ja: "クレジットカードの情報をご入力ください。"
     },

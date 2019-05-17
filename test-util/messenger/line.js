@@ -81,6 +81,46 @@ module.exports = class TestUtilMessengerLine {
         return event;
     }
 
+    create_follow_event(source){
+        let event = {
+            replyToken: "dummy",
+            type: "follow",
+            timestamp: Date.now(),
+            source: {}
+        }
+
+        if (typeof source === "string"){
+            event.source = {
+                type: "user",
+                userId: source
+            }
+        } else {
+            event.source = source;
+        }
+
+        return event;
+    }
+
+    create_unfollow_event(source){
+        let event = {
+            replyToken: "dummy",
+            type: "unfollow",
+            timestamp: Date.now(),
+            source: {}
+        }
+
+        if (typeof source === "string"){
+            event.source = {
+                type: "user",
+                userId: source
+            }
+        } else {
+            event.source = source;
+        }
+
+        return event;
+    }
+
     create_unsupported_event(source){
         let event = {
             replyToken: "dummy",

@@ -1,7 +1,6 @@
 "use strict";
 
 const debug = require("debug")("bot-express:skill");
-const parser = require("../parser/order");
 const ServiceDb = require("../service/db");
 const db = new ServiceDb();
 const translate = require("../service/translate");
