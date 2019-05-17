@@ -105,7 +105,7 @@ module.exports = class SkillPayByStripe {
         // Provide payment button.
         const payment_uri = `line://app/${LIFF_STRIPE}?session_id=${encodeURIComponent(session.id)}`
         let message = await bot.m.single_button({
-            message_text: await bot.t("please_input_credit_card") + "\n\n" + await bot.t(`pls_be_noted_that_we_cannot_refund`),
+            message_text: await bot.t("please_input_credit_card"),
             action: {
                 type: "uri",
                 label: await bot.t("input_credit_card"),

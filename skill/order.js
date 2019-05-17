@@ -197,7 +197,7 @@ module.exports = class SkillOrder {
             language: context.sender_language || "ja",
             // Application fields
             amount: total_amount,
-            item_list: context.confirmed.order_item_list
+            order_item_list: context.confirmed.order_item_list
         })
 
         // Start select_payment_method skill.

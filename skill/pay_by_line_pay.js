@@ -76,7 +76,7 @@ module.exports = class SkillPayByLinePay {
 
         // Now we can provide payment URL.
         let message = await bot.m.single_button({
-            message_text: await bot.t(`pls_pay_by_line_pay`) + "\n\n" + await bot.t(`pls_be_noted_that_we_cannot_refund`),
+            message_text: await bot.t(`pls_pay_by_line_pay`),
             action: {
                 type: "uri",
                 label: await bot.t(`pay_x_yen`, {
