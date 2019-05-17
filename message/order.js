@@ -115,6 +115,7 @@ module.exports = class MessageOrder extends Message {
                     type: "button",
                     style: "primary",
                     color: "#ff0000",
+                    height: "sm",
                     action: {
                         type: "message",
                         label: await this.t.t(`remove`),
@@ -200,15 +201,6 @@ module.exports = class MessageOrder extends Message {
                     layout: "vertical",
                     spacing: "md",
                     contents: [{
-                        type: "button",
-                        style: "primary",
-                        height: "sm",
-                        action: {
-                            type: "message",
-                            label: await this.t.t(`check`),
-                            text: await this.t.t(`check`)
-                        }
-                    },{
                         type: "box",
                         layout: "horizontal",
                         spacing: "md",
@@ -231,6 +223,15 @@ module.exports = class MessageOrder extends Message {
                                 text: await this.t.t(`add`)
                             }
                         }]
+                    },{
+                        type: "button",
+                        style: "primary",
+                        height: "sm",
+                        action: {
+                            type: "message",
+                            label: await this.t.t(`check`),
+                            text: await this.t.t(`check`)
+                        }
                     }]
                 }
             }

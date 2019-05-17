@@ -1,6 +1,9 @@
 "use strict";
 
 module.exports = {
+    modify_prev_param: {
+        ja: "前の項目を修正"
+    },
     failed_to_capture_payment: {
         ja: "決済処理に失敗しました。"
     },
