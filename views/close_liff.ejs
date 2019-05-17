@@ -7,5 +7,15 @@
   </head>
 
   <body>
+    <script src="https://d.line-scdn.net/liff/1.0/sdk.js"></script>
+    <script type="text/javascript">
+    liff.init(
+      function(data){
+          liff.closeWindow();
+      },
+      function(error){
+      }
+    );
+    </script>
   </body>
 </html>
