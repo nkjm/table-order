@@ -1,6 +1,9 @@
 "use strict";
 
 module.exports = {
+    conversation_discarded: {
+        ja: "リクエストは中止されました。"
+    },
     modify_prev_param: {
         ja: "前の項目を修正"
     },
