@@ -59,7 +59,7 @@ module.exports = class MessageAfterPay extends Message {
                         weight: "bold"
                     },{
                         type: "text",
-                        text: order.id.split("-")[1],
+                        text: Math.floor(Math.random() * (999999 - 1)) + 1, // order.id.split("-")[1],
                         align: "center",
                         size: "4xl",
                         weight: "bold"
