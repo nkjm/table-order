@@ -120,19 +120,16 @@ module.exports = class SkillOrder {
                         debug(`We will remove some order item.`);
                         bot.collect("review_order_item_list");
                         bot.collect("order_item_to_remove");
-                        return
                     } else if (value == await bot.t(`add`)){
                         debug(`We will add another order item.`);
                         bot.collect("review_order_item_list");
                         bot.collect("order_item_list");
-                        return
                     } else if (value == await bot.t(`check`)){
                         if (!(Array.isArray(context.confirmed.order_item_list) && context.confirmed.order_item_list.length > 0)){
                             bot.collect("review_order_item_list");
                             return
                         }
                         debug(`We can proceed to payment.`);
-                        return
                     } else if (value == await bot.t(`quit`)){
                         debug(`We quit order.`);
                         await bot.reply({
@@ -140,7 +137,6 @@ module.exports = class SkillOrder {
                             text: `${await bot.t("certainly")} ${await bot.t("quit_order")}`
                         })
                         bot.init();
-                        return
                     }
                 }
             }
