@@ -38,6 +38,10 @@ module.exports = {
         ja: "削除",
         en: "Remove"
     },
+    reference_number: {
+        ja: "注文番号",
+        en: "Order Number"
+    },
     order_id: {
         ja: "注文番号",
         en: "Order Number"
@@ -47,12 +51,8 @@ module.exports = {
         en: "We couldn't complete payment correctly."
     },
     your_order_is_ready: {
-        ja: (options) => {
-            return `ご注文のお料理がご用意できました。${options.restaurant}のカウンターまでお越しください。`
-        },
-        en: (options) => {
-            return `Your order is ready. Please come to ${options.restaurant} and pick it up.`
-        }
+        ja: `ご注文のお料理がご用意できました。カウンターまでお越しください。`,
+        en: `Your order is ready. Please come and pick it up.`
     },
     pls_select_restaurant: {
         ja: `レストランを選択してください。`,

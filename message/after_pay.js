@@ -53,13 +53,13 @@ module.exports = class MessageAfterPay extends Message {
                     spacing: "xl",
                     contents: [{
                         type: "text",
-                        text: await this.t.t(`order_id`),
+                        text: await this.t.t(`reference_number`),
                         align: "center",
                         size: "sm",
                         weight: "bold"
                     },{
                         type: "text",
-                        text: String(Math.floor(Math.random() * (9999 - 1000)) + 1000), // order.id.split("-")[1],
+                        text: order.reference_number, // String(Math.floor(Math.random() * (9999 - 1000)) + 1000), // order.id.split("-")[1],
                         align: "center",
                         size: "4xl",
                         weight: "bold"
