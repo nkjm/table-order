@@ -1,21 +1,12 @@
 "use strict";
 
 const debug = require("debug")("bot-express:skill");
-const Translation = require("../translation/translation");
-let t;
-const Flex = require("../service/flex");
-let flex;
 const LINE_ADMIN_USER_ID = process.env.LINE_ADMIN_USER_ID;
 const SUPPORTED_MESSAGE_TYPES = ["text"];
 
 module.exports = class SkillEscalation {
-    async begin(bot, event, context){
-        t = new Translation(bot.translator, context.sender_language);
-        flex = new Flex(t);
-    }
-
     constructor(){
-        this.clear_context_on_finish = (process.env.BOT_EXPRESS_ENV === "test") ? false : true;
+        this.clear_context_on_finish = true;
     }
 
     async finish(bot, event, context){
@@ -48,7 +39,7 @@ module.exports = class SkillEscalation {
             message_text = event.message.text;
         }
 
-        let message = await flex.escalation_message({
+        let message = await bot.m.escalation({
             sender_id: bot.extract_sender_id(),
             sender_name: sender.displayName,
             sender_language: context.sender_language,

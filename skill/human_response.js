@@ -1,21 +1,12 @@
 "use strict";
 
 const debug = require("debug")("bot-express:skill");
-const Translation = require("../translation/translation");
-let t;
-const Flex = require("../service/flex");
-let flex;
 const dialogflow = require("../service/dialogflow.js");
 
 module.exports = class SkillHumanResponse {
 
-    async begin(bot, event, context){
-        t = new Translation(bot.translator, context.sender_language);
-        flex = new Flex(t);
-    }
-
     constructor(){
-        this.clear_context_on_finish = (process.env.BOT_EXPRESS_ENV === "test") ? false : true;
+        this.clear_context_on_finish = true;
 
         this.required_parameter = {
             user: {},
@@ -24,7 +15,7 @@ module.exports = class SkillHumanResponse {
                 message_to_confirm: async (bot, event, context) => {
                     let message = {
                         type: "text",
-                        text: await t.t(`answer_pls`)
+                        text: await bot.t(`answer_pls`)
                     }
                     return message;
                 },
@@ -34,8 +25,8 @@ module.exports = class SkillHumanResponse {
             },
             enable_learning: {
                 message_to_confirm: async (bot, event, context) => {
-                    let message = await flex.multi_button_message({
-                        message_text: await t.t(`do_you_want_chatbot_learn_this_question`),
+                    let message = await bot.m.multi_button({
+                        message_text: await bot.t(`do_you_want_chatbot_learn_this_question`),
                         action_list: [
                             {type:"message", label: `いいえ`, text: `いいえ`},
                             {type:"message", label: `はい`, text: `はい`}
@@ -66,7 +57,7 @@ module.exports = class SkillHumanResponse {
 
                     bot.queue({
                         type: "text",
-                        text: await t.t(`chatbot_completed_learning`)
+                        text: await bot.t(`chatbot_completed_learning`)
                     });
                 }
             }
@@ -80,7 +71,7 @@ module.exports = class SkillHumanResponse {
         // -> Reply to administrator.
         tasks.push(bot.reply({
             type: "text",
-            text: await t.t(`i_will_reply_to_user_with_your_answer`)
+            text: await bot.t(`i_will_reply_to_user_with_your_answer`)
         }));
 
         // -> Reply to original user.
