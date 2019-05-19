@@ -36,7 +36,7 @@ exports.notify_order_ready = functions.firestore.document('/order/{order_id}').o
                 order: order
             }
         },
-        language: order.language || "ja"
+        language: order.language || "en"
     }
 
     const body = {events: [event]};

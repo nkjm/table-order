@@ -194,7 +194,7 @@ module.exports = class SkillOrder {
             status: "created",
             created_at: new Date(),
             line_user_id: bot.extract_sender_id(),
-            language: context.sender_language || "ja",
+            language: context.sender_language || "en",
             // Application fields
             reference_number: String(Math.floor(Math.random() * (9999 - 1000)) + 1000),
             amount: total_amount,
