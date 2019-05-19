@@ -92,7 +92,7 @@ module.exports = class SkillPayByStripe {
         let order_updates = {
             // Common fields
             payment_provider: "stripe",
-            // Payment proider fields
+            // Payment provider fields
             stripe_status: "created_session",
             stripe_name: context.heard.name,
             stripe_amount: context.heard.amount,
