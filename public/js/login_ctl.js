@@ -1,5 +1,5 @@
 angular.module("botex-table-order")
-.controller("rootCtl", function($scope, $log, $filter, GOOGLE_PROJECT_ID, FIREBASE_API_KEY, FIREBASE_MESSAGING_SENDER_ID){
+.controller("rootCtl", function($scope, $log, $filter, GOOGLE_PROJECT_ID, FIREBASE_API_KEY, FIREBASE_MESSAGING_SENDER_ID, LANGUAGE){
     $scope.ui = {};
     $scope.ui.alert_list = [];
 

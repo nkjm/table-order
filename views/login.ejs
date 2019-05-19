@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="foodcourt">
+<html ng-app="botex-table-order">
     <head>
         <title>Login</title>
         <meta charset="utf-8">
@@ -11,7 +11,7 @@
 
         <script src="https://www.gstatic.com/firebasejs/5.5.6/firebase-app.js"></script>
         <script src="https://www.gstatic.com/firebasejs/5.5.6/firebase-auth.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/ui/3.4.1/firebase-ui-auth__ja.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/ui/3.4.1/firebase-ui-auth__<%= language %>.js"></script>
         <script type="text/javascript" src="/js/angular.min.js"></script>
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.0/angular-animate.min.js"></script>
         <script type="text/javascript" src="/js/module.js"></script>
@@ -21,6 +21,7 @@
             .constant("GOOGLE_PROJECT_ID", "<%= google_project_id %>")
             .constant("FIREBASE_API_KEY", "<%= firebase_api_key %>")
             .constant("FIREBASE_MESSAGING_SENDER_ID", "<%= firebase_messaging_sender_id %>")
+            .constant("LANGUAGE", "<%= language %>")
         </script>
     </body>
 </html>

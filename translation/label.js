@@ -35,7 +35,7 @@ module.exports = {
     },
     pls_pay_by_line_pay: {
         ja: "LINE Payでお支払いください。",
-        en: "Please pay by LINE Pay"
+        en: "Please pay by LINE Pay."
     },
     please_input_credit_card: {
         ja: "クレジットカードの情報をご入力ください。",
