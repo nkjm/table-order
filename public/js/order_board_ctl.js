@@ -78,7 +78,7 @@ angular.module("botex-table-order")
 
         // Save to db after fade out completes.
         setTimeout(function(){
-            return db.collection("orders").doc(order_id).update(update)
+            return db.collection("order").doc(order_id).update(update)
             .catch(
                 function(error){
                     console.log(error);
@@ -103,7 +103,7 @@ angular.module("botex-table-order")
         start_ts.setHours(0, 0, 0);
         var end_ts = new Date();
         end_ts.setHours(23, 59, 59, 999);
-        db.collection("orders").where("paid_at", ">=", start_ts).where("paid_at", "<=", end_ts).orderBy("paid_at").onSnapshot(
+        db.collection("order").where("paid_at", ">=", start_ts).where("paid_at", "<=", end_ts).orderBy("paid_at").onSnapshot(
             function(query_snapshot) {
                 // Clear order list of each tab.
                 for (var tab of $scope.ui.tab_list){
