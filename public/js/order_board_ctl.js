@@ -1,6 +1,6 @@
 angular.module("botex-table-order")
-.controller("rootCtl", function($scope, $http, $log, $filter, GOOGLE_PROJECT_ID, FIREBASE_API_KEY, FIREBASE_MESSAGING_SENDER_ID){
-    moment.locale("ja");
+.controller("rootCtl", function($scope, $http, $log, $filter, GOOGLE_PROJECT_ID, FIREBASE_API_KEY, FIREBASE_MESSAGING_SENDER_ID, LANGUAGE){
+    moment.locale(LANGUAGE || "en");
     
     $scope.ui = {};
     $scope.state = {};
@@ -8,10 +8,10 @@ angular.module("botex-table-order")
     $scope.ui.alert_list = [];
     $scope.ui.tab_list = [{
         status: "paid",
-        label: "調理中",
+        label: "Cooking",
         deletable: true,
         button_list: [{
-            label: "呼び出し",
+            label: "Ring",
             icon: "bell",
             to_status: "ready",
             update_timestamp: true
@@ -19,10 +19,10 @@ angular.module("botex-table-order")
         order_list: []
     },{
         status: "ready",
-        label: "呼び出し中",
+        label: "Ready",
         deletable: true,
         button_list: [{
-            label: "提供完了",
+            label: "Served",
             icon: "check",
             to_status: "served",
             update_timestamp: true
@@ -30,10 +30,10 @@ angular.module("botex-table-order")
         order_list: []
     },{
         status: "served",
-        label: "提供済み",
+        label: "Served",
         deletable: false,
         button_list: [{
-            label: "呼び出し中に戻す",
+            label: "Revert to ready",
             icon: "undo",
             to_status: "ready",
             update_timestamp: false,
@@ -42,10 +42,10 @@ angular.module("botex-table-order")
         order_list: []
     },{
         status: "deleted",
-        label: "削除済み",
+        label: "Deleted",
         deletable: false,
         button_list: [{
-            label: "調理中に戻す",
+            label: "Revert to cooking",
             icon: "undo",
             to_status: "paid",
             update_timestamp: false,

@@ -2,37 +2,48 @@
 
 module.exports = {
     conversation_discarded: {
-        ja: "リクエストは中止されました。"
+        ja: "リクエストは中止されました。",
+        en: "Request has been discarded."
     },
     modify_prev_param: {
-        ja: "前の項目を修正"
+        ja: "前の項目を修正",
+        en: "Modify prev"
     },
     failed_to_capture_payment: {
-        ja: "決済処理に失敗しました。"
+        ja: "決済処理に失敗しました。",
+        en: "Failed to capture payment",
     },
     change_payment_method: {
-        ja: "お支払い方法を変更"
+        ja: "お支払い方法を変更",
+        en: "Change payment method"
     },
     payment_failed: {
-        ja: "購入が正常に完了しませんでした。"
+        ja: "購入が正常に完了しませんでした。",
+        en: "Payment failed."
     },
     line_pay: {
-        ja: "LINE Pay"
+        ja: "LINE Pay",
+        en: "LINE Pay" 
     },
     credit_card: {
-        ja: "クレジットカード"
+        ja: "クレジットカード",
+        en: "Credit Card"
     },
     pls_select_payment_method: {
-        ja: "お支払い方法を選択してください。"
+        ja: "お支払い方法を選択してください。",
+        en: "Please select payment method."
     },
     pls_pay_by_line_pay: {
-        ja: "LINE Payでお支払いください。"
+        ja: "LINE Payでお支払いください。",
+        en: "Please pay by LINE Pay"
     },
     please_input_credit_card: {
-        ja: "クレジットカードの情報をご入力ください。"
+        ja: "クレジットカードの情報をご入力ください。",
+        en: "Please enter your credit card."
     },
     input_credit_card: {
-        ja: "クレジットカードを入力"
+        ja: "クレジットカードを入力",
+        en: "Enter credit card"
     },
     remove: {
         ja: "削除",

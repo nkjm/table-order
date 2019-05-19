@@ -25,7 +25,7 @@ server.listen(process.env.PORT || 5000, () => {
 ** Mount bot-express
 */
 server.use("/bot/webhook", bot_express({
-    language: "ja",
+    language: process.env.BOT_LANGUAGE || "en",
     messenger: {
         line: {
             channel_id: process.env.LINE_BOT_CHANNEL_ID,
@@ -38,7 +38,7 @@ server.use("/bot/webhook", bot_express({
             project_id: process.env.GOOGLE_PROJECT_ID,
             client_email: process.env.GOOGLE_CLIENT_EMAIL,
             private_key: process.env.GOOGLE_PRIVATE_KEY,
-            language: "ja"
+            language: process.env.BOT_LANGUAGE || "en"
         }
     },
     parser: [{
@@ -47,7 +47,7 @@ server.use("/bot/webhook", bot_express({
             project_id: process.env.GOOGLE_PROJECT_ID,
             client_email: process.env.GOOGLE_CLIENT_EMAIL,
             private_key: process.env.GOOGLE_PRIVATE_KEY,
-            language: "ja"
+            language: process.env.BOT_LANGUAGE || "en"
         }
     }],
     memory: {
