@@ -114,6 +114,7 @@ angular.module("botex-table-order")
                 query_snapshot.forEach(
                     function(doc) {
                         var order = doc.data();
+                        order.id = doc.id;
                         order.formatted_paid_at = moment(order.paid_at.toDate()).format("LTS");
                         
                         for (var tab of $scope.ui.tab_list){
