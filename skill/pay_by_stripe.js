@@ -80,7 +80,8 @@ module.exports = class SkillPayByStripe {
             payment_method_types: ['card'],
             line_items: [line_item],
             success_url: SUCCESS_URL,
-            cancel_url: CANCEL_URL
+            cancel_url: CANCEL_URL,
+            locale: context.sender_language 
         });
 
         debug("Stripe session follows.");
