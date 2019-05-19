@@ -191,6 +191,7 @@ module.exports = class SkillOrder {
         // Save reservation so taht confirm URL can retrieve this information. *restaurant info will be downsized.
         const order_id = await db.create("order", {
             // Common fields
+            status: "created",
             created_at: new Date(),
             line_user_id: bot.extract_sender_id(),
             language: context.sender_language || "ja",

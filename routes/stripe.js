@@ -110,6 +110,10 @@ router.post("/checkout/webhook", async (req, res, next) => {
 
     // Make the order paid.
     let order_updates = {
+        // Common fields.
+        status: "paid",
+        paid_at: new Date(),
+        // Stripe specific fields.
         stripe_status: "paid",
         stripe_paid_at: new Date()
     }

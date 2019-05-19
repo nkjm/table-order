@@ -80,6 +80,8 @@ router.get('/confirm', async (req, res, next) => {
 
     // Make the order paid.
     let order_updates = {
+        status: "paid",
+        paid_at: new Date(),
         line_pay_status: "paid",
         line_pay_paid_at: new Date()
     }
@@ -110,6 +112,8 @@ router.get('/confirm', async (req, res, next) => {
 
         // Revert order status to ordered.
         let order_updates = {
+            status: "created",
+            paid_at: null,
             line_pay_status: null,
             line_pay_reserved_at: null,
             line_pay_paid_at: null

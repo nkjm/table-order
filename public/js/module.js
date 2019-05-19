@@ -1,1 +1,1 @@
-angular.module("foodcourt", ["ngAnimate"]);
+angular.module("botex-table-order", ["ngAnimate"]);

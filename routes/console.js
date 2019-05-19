@@ -10,38 +10,22 @@ const debug = require("debug")("bot-express:route");
 /**
  * Login.
  */
-router.get("/:restaurante_id/login", async (req, res) => {
-    if (!req.params.restaurante_id.match(/^[a-z]+$/)){
-        return res.render("error", {
-            severity: "danger",
-            message: "Restaurante ID is invalid."
-        })
-    }
-
+router.get("/login", async (req, res) => {
     return res.render("login", {
-        google_project_id: process.env.GOOGLE_PROJECT_ID,
+        google_project_id: process.env.FIREBASE_PROJECT_ID,
         firebase_api_key: process.env.FIREBASE_API_KEY,
-        firebase_messaging_sender_id: process.env.FIREBASE_MESSAGING_SENDER_ID,
-        restaurante_id: req.params.restaurante_id
+        firebase_messaging_sender_id: process.env.FIREBASE_MESSAGING_SENDER_ID
     });
 });
 
 /**
  * Order board.
  */
-router.get("/:restaurante_id/order_board", async (req, res) => {
-    if (!req.params.restaurante_id.match(/^[a-z]+$/)){
-        return res.render("error", {
-            severity: "danger",
-            message: "Restaurante ID is invalid."
-        })
-    }
-
+router.get("/order_board", async (req, res) => {
     return res.render("order_board", {
-        google_project_id: process.env.GOOGLE_PROJECT_ID,
+        google_project_id: process.env.FIREBASE_PROJECT_ID,
         firebase_api_key: process.env.FIREBASE_API_KEY,
-        firebase_messaging_sender_id: process.env.FIREBASE_MESSAGING_SENDER_ID,
-        restaurante_id: req.params.restaurante_id
+        firebase_messaging_sender_id: process.env.FIREBASE_MESSAGING_SENDER_ID
     });
 });
 

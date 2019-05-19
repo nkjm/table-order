@@ -1,5 +1,5 @@
-angular.module("foodcourt")
-.controller("rootCtl", function($scope, $log, $filter, GOOGLE_PROJECT_ID, FIREBASE_API_KEY, FIREBASE_MESSAGING_SENDER_ID, RESTAURANTE_ID){
+angular.module("botex-table-order")
+.controller("rootCtl", function($scope, $log, $filter, GOOGLE_PROJECT_ID, FIREBASE_API_KEY, FIREBASE_MESSAGING_SENDER_ID){
     $scope.ui = {};
     $scope.ui.alert_list = [];
 
@@ -16,7 +16,7 @@ angular.module("foodcourt")
 
     // FirebaseUI config.
     var uiConfig = {
-        signInSuccessUrl: "/console/" + RESTAURANTE_ID + "/order_board",
+        signInSuccessUrl: "/console/order_board",
         signInOptions: [
             // Leave the lines as is for the providers you want to offer your users.
             firebase.auth.EmailAuthProvider.PROVIDER_ID,
