@@ -184,6 +184,10 @@ module.exports = class Message {
      * @return {Object} Message object.
      */
     async qr_unshift_item(message, item){
+        if (item.action && item.action.label && item.action.label.length > 20){
+            item.action.label = item.action.label.slice(0, 18) + "..";
+        }
+
         if (message.quickReply && Array.isArray(message.quickReply.items)){
             if (message.quickReply.items.length < 13){
                 message.quickReply.items.unshift(item);
@@ -209,6 +213,10 @@ module.exports = class Message {
      * @return {Object} Message object.
      */
     async qr_push_item(message, item){
+        if (item.action && item.action.label && item.action.label.length > 20){
+            item.action.label = item.action.label.slice(0, 18) + "..";
+        }
+
         if (message.quickReply && Array.isArray(message.quickReply.items)){
             if (message.quickReply.items.length < 13){
                 message.quickReply.items.push(item);
@@ -268,12 +276,17 @@ module.exports = class Message {
         if (!(context && context.previous && Array.isArray(context.previous.processed) && context.previous.processed.length > 0)){
             return message
         }
+
+        let label = await this.t.t("modify_prev_param"); 
+        if (label.length > 20){
+            label = label.slice(0, 18) + "..";
+        } 
         
         const item = {
             type: "action",
             action: {
                 type: "postback",
-                label: await this.t.t("modify_prev_param"),
+                label: label,
                 displayText: await this.t.t("modify_prev_param"),
                 data: JSON.stringify({
                     _type: "intent",
