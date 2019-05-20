@@ -21,7 +21,7 @@ const emu = new Emulator(messenger_option.name, messenger_option.options);
 const Translation = require("../../../translation/translation");
 const t = new Translation(undefined, SENDER_LANGUAGE);
 
-describe("Test order_item_list of order skill", async function(){
+describe("Test order_item_to_remove of order skill", async function(){
     beforeEach(async () => {
         await emu.clear_context(user_id);
     })

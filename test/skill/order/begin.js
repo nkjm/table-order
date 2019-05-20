@@ -37,9 +37,9 @@ describe("Test begin of order skill", async function(){
             context = await emu.send(event);
 
             context.intent.name.should.equal("order");
-            context.confirming.should.equal("order_item_list");
-            context.confirmed.menu_list.should.have.lengthOf(3);
-            context.confirmed.menu_list[0].label.should.equal("カオマンガイ");
+            context.confirming.should.equal("label");
+            context.global.menu_list.should.have.lengthOf(3);
+            context.global.menu_list[0].label.should.equal("カオマンガイ");
         })
     })
 
@@ -58,9 +58,9 @@ describe("Test begin of order skill", async function(){
             context = await emu.send(event);
 
             context.intent.name.should.equal("order");
-            context.confirming.should.equal("order_item_list");
-            context.confirmed.menu_list.should.have.lengthOf(3);
-            context.confirmed.menu_list[0].label.should.equal("Khao Man Kai");
+            context.confirming.should.equal("label");
+            context.global.menu_list.should.have.lengthOf(3);
+            context.global.menu_list[0].label.should.equal("Khao Man Kai");
         })
     })
 })

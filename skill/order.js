@@ -8,7 +8,7 @@ const translate = require("../service/translate");
 module.exports = class SkillOrder {
     async begin(bot, event, context){
         // Retrieve menu from db.
-        context.confirmed.menu_list = translate(await db.list("menu"), context.sender_language || "ja");
+        context.global.menu_list = translate(await db.list("menu"), context.sender_language || "ja");
     }
 
     constructor(){
@@ -19,12 +19,12 @@ module.exports = class SkillOrder {
                 list: {
                     order: "new"
                 },
-                property: {
+                sub_parameter: {
                     label: {
-                        message_to_confirm: async (bot, event, context) => {
+                        message: async (bot, event, context) => {
                             let order_item_message = await bot.m.order_item({
                                 message_text: await bot.t(`may_i_have_your_order`), 
-                                menu_list: context.confirmed.menu_list
+                                menu_list: context.global.menu_list
                             });
 
                             let message_list = [{
@@ -35,16 +35,16 @@ module.exports = class SkillOrder {
                             return message_list;
                         },
                         parser: async (value, bot, event, context) => {
-                            const label_type_list = Array.from(context.confirmed.menu_list, menu => menu.label);
+                            const label_type_list = Array.from(context.global.menu_list, menu => menu.label);
                             return bot.builtin_parser.list.parse(value, {
                                 list: label_type_list
                             })
                         }
                     },
                     quantity: {
-                        message_to_confirm: async (bot, event, context) => {
+                        message: async (bot, event, context) => {
                             let message = await bot.m.text_with_qr({
-                                message_text: await bot.t("pls_tell_me_quantity_of_the_item", { label: context.confirming_property.confirmed.label }),
+                                message_text: await bot.t("pls_tell_me_quantity_of_the_item", { label: context.confirmed.label }),
                                 action_text_list: ["5", "6", "7", "8", "9", "10"]
                             });
 
@@ -70,8 +70,8 @@ module.exports = class SkillOrder {
                                 deduped_order_item.quantity += order_item.quantity;
                                 deduped_order_item.amount = deduped_order_item.unit_price * deduped_order_item.quantity;
                             } else {
-                                order_item.image = context.confirmed.menu_list.find(menu => menu.label === order_item.label).image
-                                order_item.unit_price = context.confirmed.menu_list.find(menu => menu.label === order_item.label).price
+                                order_item.image = context.global.menu_list.find(menu => menu.label === order_item.label).image
+                                order_item.unit_price = context.global.menu_list.find(menu => menu.label === order_item.label).price
                                 order_item.amount = order_item.unit_price * order_item.quantity;
                                 deduped_order_item_list.push(order_item);
                             }
@@ -82,7 +82,7 @@ module.exports = class SkillOrder {
                 }
             },
             review_order_item_list: {
-                message_to_confirm: async (bot, event, context) => {
+                message: async (bot, event, context) => {
                     let message;
                     if (context.confirmed.order_item_list.length > 0){
                         // We have some order items.
@@ -148,7 +148,7 @@ module.exports = class SkillOrder {
 
         this.optional_parameter = {
             order_item_to_remove: {
-                message_to_confirm: async (bot, event, context) => {
+                message: async (bot, event, context) => {
                     let message = await bot.m.order_item_to_remove({
                         message_text: await bot.t(`pls_select_order_to_cancel`), 
                         order_item_list: context.confirmed.order_item_list

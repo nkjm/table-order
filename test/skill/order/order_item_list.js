@@ -68,7 +68,7 @@ describe("Test order_item_list of order skill", async function(){
             context.confirmed.order_item_list.should.have.lengthOf(2);
             context.confirmed.order_item_list[0].label.should.equal("Tom Yam Goon");
             context.confirmed.order_item_list[0].quantity.should.equal(2);
-            context.confirmed.order_item_list[0].amount.should.equal(context.confirmed.menu_list.find(menu => menu.label === "Tom Yam Goon").price * 2);
+            context.confirmed.order_item_list[0].amount.should.equal(context.global.menu_list.find(menu => menu.label === "Tom Yam Goon").price * 2);
             context.confirmed.order_item_list[1].label.should.equal("Pad Thai");
             context.confirmed.order_item_list[1].quantity.should.equal(1);
         })
@@ -128,9 +128,34 @@ describe("Test order_item_list of order skill", async function(){
             context.confirmed.order_item_list.should.have.lengthOf(2);
             context.confirmed.order_item_list[0].label.should.equal("Pad Thai");
             context.confirmed.order_item_list[0].quantity.should.equal(3);
-            context.confirmed.order_item_list[0].amount.should.equal(context.confirmed.menu_list.find(menu => menu.label === "Pad Thai").price * 3);
+            context.confirmed.order_item_list[0].amount.should.equal(context.global.menu_list.find(menu => menu.label === "Pad Thai").price * 3);
             context.confirmed.order_item_list[1].label.should.equal("Tom Yam Goon");
             context.confirmed.order_item_list[1].quantity.should.equal(2);
+        })
+    })
+
+    describe("If skill is launched by intent postback with parameters,", async function(){
+        it("save all in context.", async function(){
+            let context;
+
+            context = await emu.send(emu.create_postback_event(user_id, {data: JSON.stringify({
+                type: "intent",
+                intent: {
+                    name: "order",
+                    parameters: {
+                        label: "Khao Man Kai",
+                        quantity: 2
+                    }
+                },
+                language: SENDER_LANGUAGE
+            })}));
+
+            context.intent.name.should.equal("order");
+            context.confirming.should.equal("review_order_item_list");
+            context.confirmed.order_item_list.should.have.lengthOf(1);
+            context.confirmed.order_item_list[0].label.should.equal("Khao Man Kai");
+            context.confirmed.order_item_list[0].quantity.should.equal(2);
+            context.confirmed.order_item_list[0].amount.should.equal(context.global.menu_list.find(menu => menu.label === "Khao Man Kai").price * 2);
         })
     })
 })
