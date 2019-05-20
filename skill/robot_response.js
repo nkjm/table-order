@@ -17,8 +17,8 @@ module.exports = class SkillRobotResponse {
             return;
         }
 
-        if (message.type == "text" && message.text && bot.translator && context.sender_language != "ja"){
-            message.text = await bot.translator.translate(message.text, context.sender_language);
+        if (message.type == "text" && message.text && bot.translator && context.sender_language !== process.env.BOT_LANGUAGE){
+            message.text = await bot.translator.translate(message.text, context.sender_language || process.env.BOT_LANGUAGE);
         }
 
         await bot.reply(message);
