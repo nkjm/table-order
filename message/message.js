@@ -76,9 +76,13 @@ module.exports = class Message {
                             label: await this.t.t(`discard`),
                             displayText: await this.t.t(`discard`),
                             data: JSON.stringify({
-                                _type: "intent",
+                                type: "intent",
                                 intent: {
-                                    name: "cancel"
+                                    name: "discard",
+                                    fulfillment: [{
+                                        type: "text",
+                                        text: await this.t.t(`conversation_discarded`)
+                                    }]
                                 }
                             })
                         }
@@ -246,7 +250,7 @@ module.exports = class Message {
                 label: await this.t.t("cancel"),
                 displayText: await this.t.t("cancel"),
                 data: JSON.stringify({
-                    _type: "intent",
+                    type: "intent",
                     intent: {
                         name: "discard",
                         fulfillment: [{
@@ -289,7 +293,7 @@ module.exports = class Message {
                 label: label,
                 displayText: await this.t.t("modify_prev_param"),
                 data: JSON.stringify({
-                    _type: "intent",
+                    type: "intent",
                     intent: {
                         name: "modify_previous_parameter"
                     }
