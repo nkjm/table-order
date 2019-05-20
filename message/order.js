@@ -76,14 +76,14 @@ module.exports = class MessageOrder extends Message {
                         layout: "baseline",
                         contents: [{
                             type: "text",
-                            text: `数量`,
+                            text: await this.t.t(`quantity`),
                             color: "#999999",
-                            size: "sm",
+                            size: "xs",
                             flex: 0
                         },{
                             type: "text",
                             text: `${String(o.quantity)}${await this.t.t("unit")}`,
-                            size: "lg",
+                            size: "md",
                             align: "end"
                         }]
                     },{
@@ -93,14 +93,14 @@ module.exports = class MessageOrder extends Message {
                         layout: "baseline",
                         contents: [{
                             type: "text",
-                            text: `金額`,
+                            text: await this.t.t(`amount`),
                             color: "#999999",
-                            size: "sm",
+                            size: "xs",
                             flex: 0
                         },{
                             type: "text",
                             text: `${String(o.amount)}${await this.t.t("yen")}`,
-                            size: "lg",
+                            size: "md",
                             align: "end"
                         }]
                     }]
