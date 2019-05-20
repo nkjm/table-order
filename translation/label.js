@@ -109,6 +109,10 @@ module.exports = {
         ja: `金額`,
         en: `Price`
     },
+    quantity: {
+        ja: `数量`,
+        en: `Quantity`
+    },
     is_the_order_correct: {
         ja: `ご注文はこちらの内容でよろしいでしょうか？`,
         en: `Here is your order. Is it OK?`

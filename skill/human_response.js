@@ -12,7 +12,7 @@ module.exports = class SkillHumanResponse {
             user: {},
             question: {},
             answer: {
-                message_to_confirm: async (bot, event, context) => {
+                message: async (bot, event, context) => {
                     let message = {
                         type: "text",
                         text: await bot.t(`answer_pls`)
@@ -24,7 +24,7 @@ module.exports = class SkillHumanResponse {
                 }
             },
             enable_learning: {
-                message_to_confirm: async (bot, event, context) => {
+                message: async (bot, event, context) => {
                     let message = await bot.m.multi_button({
                         message_text: await bot.t(`do_you_want_chatbot_learn_this_question`),
                         action_list: [

@@ -16,7 +16,7 @@
     "@google-cloud/translate": "^2.1.2",
     "blubird": "0.0.1-security",
     "bluebird": "^3.5.1",
-    "bot-express": "^0.5.77",
+    "bot-express": "^0.6.3",
     "debug": "^3.1.0",
     "dialogflow": "^0.6.0",
     "dotenv": "^6.0.0",

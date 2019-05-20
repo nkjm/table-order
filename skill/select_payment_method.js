@@ -18,7 +18,7 @@ module.exports = class SkillSelectPaymentMethod {
                     }
                     return false;
                 },
-                message_to_confirm: async (bot, event, context) => {
+                message: async (bot, event, context) => {
                     let message = await bot.m.text_with_qr({
                         message_text: await bot.t(`pls_select_payment_method`),
                         action_text_list: [await bot.t(`credit_card`), await bot.t(`line_pay`)]
