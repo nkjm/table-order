@@ -123,7 +123,7 @@ module.exports = {
     },
     pls_select_order: {
         ja: `ご注文の品をお選びください。`,
-        en: `Please select your order.`
+        en: `What would you like to order?`
     },
     unit: {
         ja: `個`,
