@@ -1,6 +1,46 @@
 "use strict";
 
 module.exports = {
+    i_have_no_idea_how_hot_x_is: {
+        ja: (options) => {
+            return `${options.item_label}がどれだけ辛いか？それはちょっとわかりませんねー。`
+        },
+        en: (options) => {
+            return `I have no idea how hot ${options.item_label} is.`
+        }
+    },
+    x_is_not_hot_at_all: {
+        ja: (options) => {
+            return `${options.item_label}は全然辛くないです。`
+        },
+        en: (options) => {
+            return `${options.item_label} is not hot at all. Recommended for kids, too.`
+        }
+    },
+    x_is_moderately_hot: {
+        ja: (options) => {
+            return `${options.item_label}はそこそこ辛いです。`
+        },
+        en: (options) => {
+            return `${options.item_label} is hot but no so much. It's standard in Thai Food.`
+        }
+    },
+    x_is_extremely_hot: {
+        ja: (options) => {
+            return `${options.item_label}は激しく辛いです。`
+        },
+        en: (options) => {
+            return `${options.item_label} is extremely hot but I'm sure you love it.`
+        }
+    },
+    x_not_found_in_menu: {
+        ja: (options) => {
+            return `${options.item_label}はメニューにないようです。`
+        },
+        en: (options) => {
+            return `${options.item_label} not found in menu.`
+        }
+    },
     conversation_discarded: {
         ja: "リクエストは中止されました。",
         en: "Request has been discarded."

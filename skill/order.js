@@ -8,7 +8,7 @@ const translate = require("../service/translate");
 module.exports = class SkillOrder {
     async begin(bot, event, context){
         // Retrieve menu from db.
-        context.global.menu_list = translate(await db.list("menu"), context.sender_language || "ja");
+        context.global.menu_list = translate(await db.list("menu"), context.sender_language || "en");
     }
 
     constructor(){
@@ -39,7 +39,8 @@ module.exports = class SkillOrder {
                             return bot.builtin_parser.list.parse(value, {
                                 list: label_type_list
                             })
-                        }
+                        },
+                        sub_skill: ["faq_is_hot"]
                     },
                     quantity: {
                         message: async (bot, event, context) => {
