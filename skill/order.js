@@ -43,9 +43,17 @@ module.exports = class SkillOrder {
                         },
                         parser: async (value, bot, event, context) => {
                             const label_type_list = Array.from(context.global.menu_list, menu => menu.label);
-                            return bot.builtin_parser.list.parse(value, {
-                                list: label_type_list
-                            })
+                            let parsed_value;
+                            try {
+                                parsed_value = await bot.builtin_parser.list.parse(value, {
+                                    list: label_type_list
+                                })
+                            } catch(e) {
+                                parsed_value = await bot.builtin_parser.dialogflow.parse(value, {
+                                    parameter_name: "order_item_label"
+                                })
+                            }
+                            return parsed_value;
                         },
                         sub_skill: ["faq_is_hot"]
                     },

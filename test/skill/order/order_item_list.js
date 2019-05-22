@@ -158,4 +158,26 @@ describe("Test order_item_list of order skill", async function(){
             context.confirmed.order_item_list[0].amount.should.equal(context.global.menu_list.find(menu => menu.label === "Khao Man Kai").price * 2);
         })
     })
+
+    describe("If user answers by text for label,", async function(){
+        it("validate with dialogflow.", async function(){
+            let context;
+
+            context = await emu.send(emu.create_postback_event(user_id, {data: JSON.stringify({
+                type: "intent",
+                intent: {
+                    name: "order"
+                },
+                language: SENDER_LANGUAGE
+            })}));
+
+            context.intent.name.should.equal("order");
+            context.confirming.should.equal("label");
+
+            context = await emu.send(emu.create_message_event(user_id, "Then pad thai"))
+
+            context.confirmed.label.should.equal("Pad Thai");
+            context.confirming.should.equal("quantity");
+        })
+    })
 })
