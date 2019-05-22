@@ -11,6 +11,13 @@ module.exports = class SkillOrder {
         context.global.menu_list = translate(await db.list("menu"), context.sender_language || "en");
     }
 
+    async on_abort(bot, event, context){
+        await bot.send(bot.extract_sender_id(), {
+            type: "text",
+            text: await bot.t("it_has_been_a_while_so_we_discard_this_conversation_for_now") 
+        })
+    }
+
     constructor(){
         this.clear_context_on_finish = true;
 

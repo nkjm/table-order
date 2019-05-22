@@ -1,6 +1,10 @@
 "use strict";
 
 module.exports = {
+    it_has_been_a_while_so_we_discard_this_order_for_now: {
+        ja: `しばらく時間が経ちましたので、一旦オーダーは中止しておきますね。`,
+        en: `It has been a while so we quit this order for now.`
+    },
     i_have_no_idea_how_hot_x_is: {
         ja: (options) => {
             return `${options.item_label}がどれだけ辛いか？それはちょっとわかりませんねー。`
