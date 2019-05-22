@@ -53,7 +53,7 @@ module.exports = class SkillOrder {
                         message: async (bot, event, context) => {
                             let message = await bot.m.text_with_qr({
                                 message_text: await bot.t("pls_tell_me_quantity_of_the_item", { label: context.confirmed.label }),
-                                action_text_list: ["5", "6", "7", "8", "9", "10"]
+                                action_text_list: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
                             });
 
                             message = await bot.m.qr_add_modify_prev_param(message, context);

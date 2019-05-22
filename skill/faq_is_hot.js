@@ -44,26 +44,6 @@ module.exports = class SkillFaqIsHot {
             text: message_text
         }
 
-        // Check last message from bot in parent context and if quick reply found, we add it to the message.
-        if (context._sub_skill && Array.isArray(context._parent) && context._parent.length > 0 && Array.isArray(context._parent[context._parent.length - 1].previous.message)){
-            for (const parent_message of context._parent[context._parent.length - 1].previous.message){
-                if (parent_message.from === "bot" && parent_message.skill === context._parent[context._parent.length - 1].skill.type){
-                    // If previous message of parent context has quick reply, we add them.
-                    if (parent_message.message.quickReply && Array.isArray(parent_message.message.quickReply.items)){
-                        // If message of this skill has quick reply, we push quick reply of parent context to this message.
-                        if (message.quickReply && Array.isArray(message.quickReply.items)){
-                            for (const item of parent_message.message.quickReply.items){
-                                message = await bot.m.qr_push_item(message, item);
-                            }
-                        } else {
-                            message.quickReply = parent_message.message.quickReply;
-                        }
-                    }
-                    break;
-                }
-            }
-        }
-
         await bot.reply(message);
     }
 }

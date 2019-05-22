@@ -44,7 +44,6 @@ describe("Test faq_is_hot skill", async function(){
             context = await emu.send(emu.create_message_event(user_id, "How hot is Pad Thai?"));
 
             context.previous.message[0].message.text.should.equal(await t.t("x_is_moderately_hot", { item_label: "Pad Thai" }))
-            context.previous.message[0].message.quickReply.items.should.have.lengthOf(3);
             context.intent.name.should.equal("order");
             context.confirming.should.equal("label");
         })
