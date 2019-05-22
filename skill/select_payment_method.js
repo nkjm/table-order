@@ -34,6 +34,18 @@ module.exports = class SkillSelectPaymentMethod {
         }
     }
 
+    async on_abort(bot, event, context){
+        // Link richmenu.
+        if (process.env.BOT_EXPRESS_ENV !== "test"){
+            await bot.line.sdk.linkRichMenuToUser(bot.extract_sender_id(), process.env.RICHMENU_CONTROL_PANEL);
+        }
+
+        await bot.send(bot.extract_sender_id(), {
+            type: "text",
+            text: await bot.t("it_has_been_a_while_so_we_discard_this_order_for_now") 
+        })
+    }
+
     async finish(bot, event, context){
         // Check if we have all the required parameters.
         for (const p of REQUIRED_PARAMETER_LIST){

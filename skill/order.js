@@ -9,12 +9,22 @@ module.exports = class SkillOrder {
     async begin(bot, event, context){
         // Retrieve menu from db.
         context.global.menu_list = translate(await db.list("menu"), context.sender_language || "en");
+
+        // Unink richmenu.
+        if (process.env.BOT_EXPRESS_ENV !== "test"){
+            await bot.line.sdk.unlinkRichMenuFromUser(bot.extract_sender_id(), process.env.RICHMENU_CONTROL_PANEL);
+        }
     }
 
     async on_abort(bot, event, context){
+        // Link richmenu.
+        if (process.env.BOT_EXPRESS_ENV !== "test"){
+            await bot.line.sdk.linkRichMenuToUser(bot.extract_sender_id(), process.env.RICHMENU_CONTROL_PANEL);
+        }
+
         await bot.send(bot.extract_sender_id(), {
             type: "text",
-            text: await bot.t("it_has_been_a_while_so_we_discard_this_conversation_for_now") 
+            text: await bot.t("it_has_been_a_while_so_we_discard_this_order_for_now") 
         })
     }
 
