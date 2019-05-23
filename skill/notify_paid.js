@@ -31,5 +31,10 @@ module.exports = class SkillNotifyPaid {
         }
 
         await bot.reply(message);
+
+        // Link richmenu.
+        if (process.env.BOT_EXPRESS_ENV !== "test"){
+            await bot.line.sdk.linkRichMenuToUser(bot.extract_sender_id(), process.env.RICHMENU_CONTROL_PANEL);
+        }
     }
 }
