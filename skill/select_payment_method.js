@@ -42,7 +42,7 @@ module.exports = class SkillSelectPaymentMethod {
 
         await bot.send(bot.extract_sender_id(), {
             type: "text",
-            text: await bot.t("it_has_been_a_while_so_we_discard_this_order_for_now") 
+            text: await bot.t("it_has_been_a_while_so_we_quit_this_order_for_now") 
         })
     }
 

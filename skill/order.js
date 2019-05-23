@@ -24,7 +24,7 @@ module.exports = class SkillOrder {
 
         await bot.send(bot.extract_sender_id(), {
             type: "text",
-            text: await bot.t("it_has_been_a_while_so_we_discard_this_order_for_now") 
+            text: await bot.t("it_has_been_a_while_so_we_quit_this_order_for_now") 
         })
     }
 
@@ -139,30 +139,28 @@ module.exports = class SkillOrder {
                     if (error) return;
 
                     if (value == await bot.t(`remove`)){
+                        // Ask item to remove.
                         if (!(Array.isArray(context.confirmed.order_item_list) && context.confirmed.order_item_list.length > 0)){
                             bot.collect("review_order_item_list");
                             return
                         }
-                        debug(`We will remove some order item.`);
                         bot.collect("review_order_item_list");
                         bot.collect("order_item_to_remove");
                     } else if (value == await bot.t(`add`)){
-                        debug(`We will add another order item.`);
+                        // Ask item to add.
                         bot.collect("review_order_item_list");
                         bot.collect("order_item_list");
                     } else if (value == await bot.t(`check`)){
+                        // Proceed.
                         if (!(Array.isArray(context.confirmed.order_item_list) && context.confirmed.order_item_list.length > 0)){
                             bot.collect("review_order_item_list");
                             return
                         }
-                        debug(`We can proceed to payment.`);
                     } else if (value == await bot.t(`quit`)){
-                        debug(`We quit order.`);
-                        await bot.reply({
-                            type: "text",
-                            text: `${await bot.t("certainly")} ${await bot.t("quit_order")}`
+                        // Quit conversation.
+                        bot.switch_skill({
+                            name: "quit"
                         })
-                        bot.init();
                     }
                 }
             }

@@ -87,8 +87,8 @@ module.exports = class SkillPayByLinePay {
             }
         })
 
-        // Add discard button.
-        message = await bot.m.qr_add_discard(message);
+        // Add quit button.
+        message = await bot.m.qr_add_quit(message);
 
         // Add change payment method button.
         if (process.env.ASK_PAYMENT_METHOD === `enable`){

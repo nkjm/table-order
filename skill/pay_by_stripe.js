@@ -81,7 +81,7 @@ module.exports = class SkillPayByStripe {
             line_items: [line_item],
             success_url: SUCCESS_URL,
             cancel_url: CANCEL_URL,
-            locale: context.sender_language 
+            locale: context.sender_language || process.env.BOT_LANGUAGE || "en" 
         });
 
         debug("Stripe session follows.");
@@ -115,8 +115,8 @@ module.exports = class SkillPayByStripe {
             }
         })
         
-        // Add discard button.
-        message = await bot.m.qr_add_discard(message);
+        // Add quit button.
+        message = await bot.m.qr_add_quit(message);
 
         // Add change payment method button.
         if (process.env.ASK_PAYMENT_METHOD === `enable`){

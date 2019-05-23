@@ -73,16 +73,12 @@ module.exports = class Message {
                         height: "sm",
                         action: {
                             type: "postback",
-                            label: await this.t.t(`discard`),
-                            displayText: await this.t.t(`discard`),
+                            label: await this.t.t(`quit`),
+                            displayText: await this.t.t(`quit`),
                             data: JSON.stringify({
                                 type: "intent",
                                 intent: {
-                                    name: "discard",
-                                    fulfillment: [{
-                                        type: "text",
-                                        text: await this.t.t(`conversation_discarded`)
-                                    }]
+                                    name: "quit"
                                 }
                             })
                         }
@@ -236,27 +232,23 @@ module.exports = class Message {
     }
 
     /**
-     * Add quick reply button to discard conversation.
+     * Add quick reply button to quit conversation.
      * @method
      * @async
      * @param {Object} message
      * @return {Object} Message object.
      */
-    async qr_add_discard(message){
+    async qr_add_quit(message){
         const item = {
             type: "action",
             action: {
                 type: "postback",
-                label: await this.t.t("cancel"),
-                displayText: await this.t.t("cancel"),
+                label: await this.t.t("quit"),
+                displayText: await this.t.t("quit"),
                 data: JSON.stringify({
                     type: "intent",
                     intent: {
-                        name: "discard",
-                        fulfillment: [{
-                            type: "text",
-                            text: await this.t.t("conversation_discarded")
-                        }]
+                        name: "quit"
                     }
                 })
             }
