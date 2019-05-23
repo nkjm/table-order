@@ -82,7 +82,7 @@ module.exports = class SkillPayByLinePay {
                 label: await bot.t(`pay_x_yen`, {
                     amount: context.heard.amount
                 }),
-                uri: `line://app/${process.env.LIFF_PAY}/?payment_url=${encodeURIComponent(payment_response.info.paymentUrl.web)}`,
+                uri: `line://app/${process.env.LIFF_LINE_PAY}/?payment_url=${encodeURIComponent(payment_response.info.paymentUrl.web)}`,
                 style: "primary"
             }
         })
@@ -109,13 +109,7 @@ module.exports = class SkillPayByLinePay {
             })
         }
 
-        try {
-            await bot.reply(message);
-        } catch(e){
-            // Since it takes time until we can reply to user, we push message in case of failure due to expiration of reply token.
-            // Error message should say "Invalid reply token".
-            await bot.send(bot.extract_sender_id(), message);
-        }
+        await bot.reply(message);
 
         // Link richmenu.
         if (process.env.BOT_EXPRESS_ENV !== "test"){

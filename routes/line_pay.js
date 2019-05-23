@@ -9,10 +9,6 @@ const db = new ServiceDb();
 const ServiceCache = require("../service/cache");
 const cache = new ServiceCache();
 const line_event = require("../service/line_event");
-const request = require("request");
-const Promise = require("bluebird");
-Promise.promisifyAll(request);
-const Translation = require("../translation/translation");
 
 const pay = new Pay({
     channelId: process.env.LINE_PAY_CHANNEL_ID,
@@ -20,37 +16,6 @@ const pay = new Pay({
     isSandbox: (process.env.LINE_PAY_ENV === "sandbox") ? true : false,
     proxyUrl: (process.env.LINE_PAY_ENV === "sandbox") ? null : process.env.FIXIE_URL
 });
-
-/**
- * @method
- * @async
- * @param {Object} options
- * @param {String} options.status - failed | paid | completed
- * @param {String} options.line_user_id
- * @param {String} options.order_id
- * @param {String} options.message_label
- * @param {String} [options.language="ja"]
- */
-async function notify_payment_status(options){
-    const o = options;
-
-    await line_event.fire({
-        type: "bot-express:push",
-        to: {
-            type: "user",
-            userId: o.line_user_id
-        },
-        intent: {
-            name: "after_pay",
-            parameters: {
-                status: o.status,
-                order_id: o.order_id,
-                message_label: o.message_label
-            }
-        },
-        language: o.language || "ja"
-    });
-}
 
 /**
  * Payment confirm URL
@@ -89,12 +54,15 @@ router.get('/confirm', async (req, res, next) => {
     try {
         await db.update("order", order_updates, order_id);
     } catch(e){
-        await notify_payment_status({
-            status: `failed`,
+        await line_event.botex_push({
+            skill: "notify_paid",
             line_user_id: order.line_user_id,
-            order_id: order_id,
-            language: order.language || "ja",
-            message_label: "failed_to_save_order"
+            language: order.language,
+            parameters: {
+                status: `failed`,
+                order: order,
+                message_label: "failed_to_save_order"
+            }
         })
     }
 
@@ -128,12 +96,15 @@ router.get('/confirm', async (req, res, next) => {
         res.sendStatus(400);
 
         debug("Going to send error message to user.");
-        await notify_payment_status({
-            status: `failed`,
+        await line_event.botex_push({
+            skill: "notify_paid",
             line_user_id: order.line_user_id,
-            order_id: order_id,
-            language: order.language || "ja",
-            message_label: "failed_to_capture_payment"
+            language: order.language,
+            parameters: {
+                status: `failed`,
+                order: order,
+                message_label: "failed_to_capture_payment"
+            }
         })
 
         return
@@ -142,12 +113,15 @@ router.get('/confirm', async (req, res, next) => {
     res.sendStatus(200);
 
     debug("Trigger after payment skill.");
-    await notify_payment_status({
-        status: `completed`,
+    await line_event.botex_push({
+        skill: "notify_paid",
         line_user_id: order.line_user_id,
-        order_id: order_id,
-        language: order.language || "ja",
-        message_label: "sending_receipt"
+        language: order.language,
+        parameters: {
+            status: `completed`,
+            order: order,
+            message_label: "sending_receipt"
+        }
     })
 });
 

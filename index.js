@@ -2,9 +2,9 @@
 
 require("dotenv").config();
 
-/*
-** Import Packages
-*/
+/**
+ * Import Packages
+ */
 const express = require("express");
 const server = express();
 const bot_express = require("bot-express");
@@ -14,16 +14,16 @@ server.set('views', path.join(__dirname, 'views'));
 server.set('view engine', 'ejs');
 server.use(express.static(path.join(__dirname, 'public')));
 
-/*
-** Middleware Configuration
-*/
+/**
+ * Middleware Configuration
+ */
 server.listen(process.env.PORT || 5000, () => {
     console.log("server is running...");
 });
 
-/*
-** Mount bot-express
-*/
+/** 
+ * Mount bot-express
+ */
 server.use("/bot/webhook", bot_express({
     language: process.env.BOT_LANGUAGE || "en",
     messenger: {

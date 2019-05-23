@@ -1,41 +1,28 @@
 "use strict";
 
 const debug = require("debug")("bot-express:skill");
-const ServiceDb = require("../service/db");
-const db = new ServiceDb();
 
 /**
  * Following parameters need to be included.
- * {String} order_id
- * {Status} status
+ * {Object} order
+ * {Status} status - "completed" | "failed"
  * {String} message_label
  */
-module.exports = class SkillAfterPay {
+module.exports = class SkillNotifyPaid {
     constructor(){
         this.clear_context_on_finish = true;
     }
 
     async finish(bot, event, context){
-        // Get order
-        const order = await db.get("order", context.heard.order_id);
-
-        if (!order){
+        if (!context.heard.order){
             throw new Error(`Order not found.`);
         }
 
-        order.id = context.heard.order_id;
-
         let message;
-
         if (context.heard.status === `completed`){
             message = await bot.m.receipt({
-                order: order,
+                order: context.heard.order,
             })
-        } else if (context.heard.status === `paid`){
-            message = {
-                type: "text",
-                text: await bot.t(context.heard.message_label),
-            }
         } else if (context.heard.status === `failed`){
             message = {
                 type: "text",

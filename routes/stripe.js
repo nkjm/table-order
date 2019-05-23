@@ -23,9 +23,6 @@ function extract_session(req){
         session = event.data.object;
     }
 
-    debug(`Extracted session follows.`);
-    debug(session);
-
     return session;
 }
 
@@ -37,37 +34,6 @@ async function rollback(order, session){
     });
 
     debug(`Refund/Rollback completed.`)
-}
-
-/**
- * @method
- * @async
- * @param {Object} options
- * @param {String} options.status - failed | paid | completed
- * @param {String} options.line_user_id
- * @param {String} options.order_id
- * @param {String} options.message_label
- * @param {String} [options.language="ja"]
- */
-async function notify_payment_status(options){
-    const o = options;
-
-    await line_event.fire({
-        type: "bot-express:push",
-        to: {
-            type: "user",
-            userId: o.line_user_id
-        },
-        intent: {
-            name: "after_pay",
-            parameters: {
-                status: o.status,
-                order_id: o.order_id,
-                message_label: o.message_label
-            }
-        },
-        language: o.language || "ja"
-    });
 }
 
 /**
@@ -84,9 +50,16 @@ router.post("/checkout/webhook", async (req, res, next) => {
         debug(err.message || `May be due to signature validation failure.`);
         return res.sendStatus(400);
     }
+
     
     // Return acknowledge.
     res.json({ received: true });
+
+    // Check if this event is the one we care about. If not, we skip processing.
+    if (!session){
+        debug(`This event is not the one we care about.`)
+        return;
+    }
 
     // Get order by session id.
     const query_snapshot = await db.firestore.collection("order").where("stripe_session_id", "==", session.id).get();
@@ -104,9 +77,6 @@ router.post("/checkout/webhook", async (req, res, next) => {
         debug("Order not found or required parameter not included so skip processing.");
         return;
     }
-
-    // Used if this payment require reservation.
-    const reservation_list = [];
 
     // Make the order paid.
     let order_updates = {
@@ -127,24 +97,30 @@ router.post("/checkout/webhook", async (req, res, next) => {
         // If any of the reservation fails, we need to rollback payment and reservation.
         await rollback(order, session);
 
-        await notify_payment_status({
-            status: "failed",
+        await line_event.botex_push({
+            skill: "notify_paid",
             line_user_id: order.line_user_id,
-            order_id: order.id,
-            language: order.language || "ja",
-            message_label: "failed_to_save_order_so_we_rollback_payment"
+            language: order.language,
+            parameters: {
+                status: `failed`,
+                order: order,
+                message_label: "failed_to_save_order_so_we_rollback_payment"
+            }
         })
 
         return;
     }
 
     debug("Trigger after payment skill.");
-    await notify_payment_status({
-        status: "completed",
+    await line_event.botex_push({
+        skill: "notify_paid",
         line_user_id: order.line_user_id,
-        order_id: order.id,
-        language: order.language || "ja",
-        message_label: "sending_receipt"
+        language: order.language,
+        parameters: {
+            status: `completed`,
+            order: order,
+            message_label: "sending_receipt"
+        }
     })
 });
 

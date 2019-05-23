@@ -6,31 +6,15 @@ const db = new ServiceDb();
 const translate = require("../service/translate");
 
 module.exports = class SkillOrder {
-    async begin(bot, event, context){
-        // Retrieve menu from db.
-        context.global.menu_list = translate(await db.list("menu"), context.sender_language || "en");
-
-        // Unink richmenu.
-        if (process.env.BOT_EXPRESS_ENV !== "test"){
-            await bot.line.sdk.unlinkRichMenuFromUser(bot.extract_sender_id(), process.env.RICHMENU_CONTROL_PANEL);
-        }
-    }
-
-    async on_abort(bot, event, context){
-        // Link richmenu.
-        if (process.env.BOT_EXPRESS_ENV !== "test"){
-            await bot.line.sdk.linkRichMenuToUser(bot.extract_sender_id(), process.env.RICHMENU_CONTROL_PANEL);
-        }
-
-        await bot.send(bot.extract_sender_id(), {
-            type: "text",
-            text: await bot.t("it_has_been_a_while_so_we_quit_this_order_for_now") 
-        })
-    }
-
     constructor(){
+        /**
+         * If set to true, context will be cleared when skill finishes.
+         */
         this.clear_context_on_finish = true;
 
+        /**
+         * Required parametes to finish this skill.
+         */
         this.required_parameter = {
             order_item_list: {
                 list: {
@@ -151,7 +135,7 @@ module.exports = class SkillOrder {
                         bot.collect("review_order_item_list");
                         bot.collect("order_item_list");
                     } else if (value == await bot.t(`check`)){
-                        // Proceed.
+                        // Proceed as long as order_item_list is set.
                         if (!(Array.isArray(context.confirmed.order_item_list) && context.confirmed.order_item_list.length > 0)){
                             bot.collect("review_order_item_list");
                             return
@@ -166,6 +150,10 @@ module.exports = class SkillOrder {
             }
         }
 
+        /**
+         * Parameters to be collected only when explicitly collected by bot.collect() method.
+         * In this skill, order_item_to_remove is collected when user wants to remove some ordered item.
+         */
         this.optional_parameter = {
             order_item_to_remove: {
                 message: async (bot, event, context) => {
@@ -184,6 +172,7 @@ module.exports = class SkillOrder {
                 reaction: async (error, value, bot, event, context) => {
                     if (error) return;
 
+                    // Remove item from order_item_list.
                     let i = 0;
                     for (const order_item of context.confirmed.order_item_list){
                         if (order_item.label === value){
@@ -202,6 +191,37 @@ module.exports = class SkillOrder {
         }
     }
 
+    /**
+     * Runs when conversation starts.
+     */
+    async begin(bot, event, context){
+        // Retrieve menu from db.
+        context.global.menu_list = translate(await db.list("menu"), context.sender_language || "en");
+
+        // Unink richmenu temporarily to expand available screen size.
+        if (process.env.BOT_EXPRESS_ENV !== "test"){
+            await bot.line.sdk.unlinkRichMenuFromUser(bot.extract_sender_id(), process.env.RICHMENU_CONTROL_PANEL);
+        }
+    }
+
+    /**
+     * Runs when context is expired. 
+     */
+    async on_abort(bot, event, context){
+        // Link richmenu.
+        if (process.env.BOT_EXPRESS_ENV !== "test"){
+            await bot.line.sdk.linkRichMenuToUser(bot.extract_sender_id(), process.env.RICHMENU_CONTROL_PANEL);
+        }
+
+        await bot.send(bot.extract_sender_id(), {
+            type: "text",
+            text: await bot.t("no_answer_for_a_while_so_we_quit_this_order_for_now") 
+        })
+    }
+
+    /**
+     * Runs when all the required parameters are collected.
+     */
     async finish(bot, event, context){
         let total_amount = 0;
         for (let order_item of context.confirmed.order_item_list){
