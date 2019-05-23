@@ -79,7 +79,8 @@ module.exports = class Message {
                                 type: "intent",
                                 intent: {
                                     name: "quit"
-                                }
+                                },
+                                language: process.env.BOT_LANGUAGE || "en"
                             })
                         }
                     },{
@@ -249,7 +250,8 @@ module.exports = class Message {
                     type: "intent",
                     intent: {
                         name: "quit"
-                    }
+                    },
+                    language: process.env.BOT_LANGUAGE || "en"
                 })
             }
         }
@@ -288,7 +290,8 @@ module.exports = class Message {
                     type: "intent",
                     intent: {
                         name: "modify_previous_parameter"
-                    }
+                    },
+                    language: context.sender_language || process.env.BOT_LANGUAGE || "en"
                 })
             }
         }

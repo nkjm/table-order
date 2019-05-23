@@ -127,11 +127,12 @@ module.exports = class SkillPayByStripe {
                     label: await bot.t("change_payment_method"),
                     displayText: await bot.t("change_payment_method"),
                     data: JSON.stringify({
-                        _type: "intent",
+                        type: "intent",
                         intent: {
                             name: "select_payment_method",
                             parameters: context.heard
-                        }
+                        },
+                        language: context.sender_language || process.env.BOT_LANGUAGE || "en" 
                     })
                 }
             })

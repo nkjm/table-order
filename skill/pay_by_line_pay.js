@@ -42,7 +42,7 @@ module.exports = class SkillPayByLinePay {
             amount: context.heard.amount,
             confirmUrl: process.env.LINE_PAY_CONFIRM_URL,
             confirmUrlType: "SERVER",
-            langCd: context.sender_language || "ja"
+            langCd: context.sender_language || process.env.BOT_LANGUAGE || "en" 
         }
 
         // Check if optional parameter is set in context heard.
@@ -99,11 +99,12 @@ module.exports = class SkillPayByLinePay {
                     label: await bot.t("change_payment_method"),
                     displayText: await bot.t("change_payment_method"),
                     data: JSON.stringify({
-                        _type: "intent",
+                        type: "intent",
                         intent: {
                             name: "select_payment_method",
                             parameters: context.heard
-                        }
+                        },
+                        language: context.sender_language || process.env.BOT_LANGUAGE || "en" 
                     })
                 }
             })
