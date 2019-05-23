@@ -116,5 +116,10 @@ module.exports = class SkillPayByLinePay {
             // Error message should say "Invalid reply token".
             await bot.send(bot.extract_sender_id(), message);
         }
+
+        // Link richmenu.
+        if (process.env.BOT_EXPRESS_ENV !== "test"){
+            await bot.line.sdk.linkRichMenuToUser(bot.extract_sender_id(), process.env.RICHMENU_CONTROL_PANEL);
+        }
     }
 }
