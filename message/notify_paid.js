@@ -3,11 +3,10 @@
 const debug = require("debug")("bot-express:message")
 const Message = require("./message");
 
-module.exports = class MessageAfterPay extends Message {
+module.exports = class MessageNotifyPaid extends Message {
     constructor(translator){
         super(translator);
     }
-
 
     /**
      * @method
