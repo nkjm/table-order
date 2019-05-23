@@ -28,6 +28,9 @@ module.exports = class SkillOrder {
                                 menu_list: context.global.menu_list
                             });
 
+                            // Add quit button.
+                            order_item_message = await bot.m.qr_add_quit(order_item_message);
+
                             let message_list = [{
                                 type: "text",
                                 text: await bot.t(`pls_select_order`)
@@ -97,6 +100,9 @@ module.exports = class SkillOrder {
                     if (context.confirmed.order_item_list.length > 0){
                         // We have some order items.
                         message = await bot.m.review_order_item_list(context.confirmed.order_item_list);
+
+                        // Add quit button.
+                        message = await bot.m.qr_add_quit(message);
                     } else {
                         // order item list is emply.
                         message = await bot.m.multi_button({
@@ -116,7 +122,7 @@ module.exports = class SkillOrder {
                 },
                 parser: async (value, bot, event, context) => {
                     return bot.builtin_parser.list.parse(value, {
-                        list: [await bot.t(`remove`), await bot.t(`add`), await bot.t(`check`), await bot.t(`quit`)]
+                        list: [await bot.t(`remove`), await bot.t(`add`), await bot.t(`check`)]
                     })
                 },
                 reaction: async (error, value, bot, event, context) => {
@@ -140,11 +146,6 @@ module.exports = class SkillOrder {
                             bot.collect("review_order_item_list");
                             return
                         }
-                    } else if (value == await bot.t(`quit`)){
-                        // Quit conversation.
-                        bot.switch_skill({
-                            name: "quit"
-                        })
                     }
                 }
             }
