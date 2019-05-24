@@ -60,7 +60,7 @@ module.exports = class SkillFaqRecommendation {
             action: {
                 type: "message",
                 label: await bot.t("order_x", { item_label: recommended_item.label }),
-                text: recommended_item.label
+                text: await bot.t("i_like_to_order_x", { item_label: recommended_item.label })
             }
         })
 

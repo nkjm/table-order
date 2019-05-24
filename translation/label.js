@@ -13,6 +13,14 @@ module.exports = {
             return `Order ${options.item_label}`
         }
     },
+    i_like_to_order_x: {
+        ja: (options) => {
+            return `${options.item_label}を注文します`
+        },
+        en: (options) => {
+            return `I like to order ${options.item_label}`
+        }
+    },
     our_recommendation_is_x: {
         ja: (options) => {
             return `お薦めは${options.item_label}です。`
