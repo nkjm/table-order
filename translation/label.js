@@ -1,6 +1,10 @@
 "use strict";
 
 module.exports = {
+    it_will_be_ready_in_2_mins: {
+        ja: `あと2分で出来上がります。`,
+        en: `It will be ready in 2 minutes.`
+    },
     yes_we_have_x: {
         ja: (options) => {
             return `はい、${options.item_label}はございます。`
