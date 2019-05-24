@@ -46,7 +46,7 @@ describe("Test faq_is_recommendation", async function(){
             context.intent.name.should.equal("faq_recommendation");
             context.confirming.should.equal("ingredient");
 
-            context = await emu.send(emu.create_message_event(user_id, "Sea food"));
+            context = await emu.send(emu.create_message_event(user_id, "Seafood"));
 
             context.previous.message[0].message.text.should.equal(await t.t("our_recommendation_is_x", { item_label: "Tom Yam Goon" }))
             context.intent.name.should.equal("order");

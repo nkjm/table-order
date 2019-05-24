@@ -23,7 +23,7 @@ module.exports = {
     },
     which_ingredients_do_you_like: {
         ja: "お野菜、お肉でお好みはございますか？",
-        en: "Which do you like vegetables or meats?"
+        en: "Which do you like vegetables, seafoods or meats?"
     },
     vegetable: {
         ja: "野菜",
@@ -43,7 +43,7 @@ module.exports = {
     },
     seafood: {
         ja: "魚介",
-        en: "Sea food"
+        en: "Seafood"
     },
     no_answer_for_a_while_so_we_quit_this_order_for_now: {
         ja: `しばらく時間が経ちましたので、一旦オーダーは中止しておきますね。`,
