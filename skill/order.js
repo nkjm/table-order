@@ -126,7 +126,19 @@ module.exports = class SkillOrder {
                     })
                 },
                 reaction: async (error, value, bot, event, context) => {
-                    if (error) return;
+                    if (error){
+                        // Check if user answer order item.
+                        try {
+                            const parsed_value = await bot.builtin_parser.dialogflow.parse(value, {
+                                parameter_name: "order_item_label"
+                            })
+                            bot.collect("order_item_list");
+                            context.heard.label = parsed_value;
+                        } catch(e){
+                            // It was not order item so just return.
+                        }
+                        return
+                    }
 
                     if (value == await bot.t(`remove`)){
                         // Ask item to remove.
@@ -147,7 +159,8 @@ module.exports = class SkillOrder {
                             return
                         }
                     }
-                }
+                },
+                sub_skill: ["faq_recommendation", "faq_search_item"]
             }
         }
 

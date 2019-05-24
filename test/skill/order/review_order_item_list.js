@@ -175,4 +175,42 @@ describe("Test review_order_item_list of order skill", async function(){
             should.not.exist(context.confirming);
         })
     })
+
+    describe("If user answers order item,", async function(){
+        it("accepts it and ask quantity", async function(){
+            let context;
+
+            context = await emu.send(emu.create_postback_event(user_id, {data: JSON.stringify({
+                type: "intent",
+                intent: {
+                    name: "order"
+                },
+                language: SENDER_LANGUAGE
+            })}));
+
+            context.intent.name.should.equal("order");
+            context.confirming.should.equal("label");
+
+            context = await emu.send(emu.create_postback_event(user_id, {data: JSON.stringify({
+                type: "process_parameters",
+                parameters: {
+                    label: "Pad Thai",
+                    quantity: 1
+                }
+            })}));
+
+            context.confirming.should.equal("review_order_item_list");
+            context.confirmed.order_item_list.should.have.lengthOf(1);
+
+            context = await emu.send(emu.create_message_event(user_id, "Tom yam goon"));
+
+            context.confirming.should.equal("quantity");
+            context.confirmed.label.should.equal("Tom Yam Goon");
+
+            context = await emu.send(emu.create_message_event(user_id, "2"));
+
+            context.confirming.should.equal("review_order_item_list");
+            context.confirmed.order_item_list.should.have.lengthOf(2);
+        })
+    })
 })
