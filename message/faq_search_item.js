@@ -3,7 +3,7 @@
 const debug = require("debug")("bot-express:message");
 const Message = require("./message.js");
 
-module.exports = class MessageFaqRecommendation extends Message {
+module.exports = class MessageFaqSearchItem extends Message {
     constructor(translation){
         super(translation);
     }

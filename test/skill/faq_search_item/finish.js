@@ -21,13 +21,13 @@ const emu = new Emulator(messenger_option.name, messenger_option.options);
 const Translation = require("../../../translation/translation");
 const t = new Translation(undefined, SENDER_LANGUAGE);
 
-describe("Test faq_recommendation", async function(){
+describe("Test faq_search_item", async function(){
     beforeEach(async () => {
         await emu.clear_context(user_id);
     })
 
-    describe("If ingredient found,", async function(){
-        it("provides recommendation.", async function(){
+    describe("If item found,", async function(){
+        it("answer yes.", async function(){
             let context;
 
             context = await emu.send(emu.create_postback_event(user_id, {data: JSON.stringify({
@@ -41,14 +41,9 @@ describe("Test faq_recommendation", async function(){
             context.intent.name.should.equal("order");
             context.confirming.should.equal("label");
 
-            context = await emu.send(emu.create_message_event(user_id, "What is your recommendation?"));
+            context = await emu.send(emu.create_message_event(user_id, "Do you have pad thai?"));
 
-            context.intent.name.should.equal("faq_recommendation");
-            context.confirming.should.equal("ingredient");
-
-            context = await emu.send(emu.create_message_event(user_id, "Seafood"));
-
-            context.previous.message[0].message.text.should.equal(await t.t("our_recommendation_is_x", { item_label: "Tom Yam Goon" }))
+            context.previous.message[0].message.text.should.equal(await t.t("yes_we_have_x", { item_label: "Pad Thai" }))
             context.intent.name.should.equal("order");
             context.confirming.should.equal("label");
 
@@ -58,35 +53,24 @@ describe("Test faq_recommendation", async function(){
         })
     })
 
-    describe("If ingredient not found,", async function(){
-        it("sorry.", async function(){
+    describe.only("If item not found,", async function(){
+        it("answer no.", async function(){
             let context;
 
             context = await emu.send(emu.create_postback_event(user_id, {data: JSON.stringify({
                 type: "intent",
                 intent: {
-                    name: "order"
+                    name: "faq_search_item"
                 },
                 language: SENDER_LANGUAGE
             })}));
 
-            context.intent.name.should.equal("order");
-            context.confirming.should.equal("label");
+            context.intent.name.should.equal("faq_search_item");
+            context.confirming.should.equal("item_label");
 
-            context = await emu.send(emu.create_message_event(user_id, "What is your recommendation?"));
+            context = await emu.send(emu.create_message_event(user_id, "iPad"));
 
-            context.intent.name.should.equal("faq_recommendation");
-            context.confirming.should.equal("ingredient");
-
-            context = await emu.send(emu.create_message_event(user_id, "Beef"));
-
-            context.previous.message[0].message.text.should.equal(await t.t("sorry_we_have_no_recommendation_for_you"))
-            context.intent.name.should.equal("order");
-            context.confirming.should.equal("label");
-
-            context = await emu.send(emu.create_message_event(user_id, "Pad Thai"));
-
-            context.confirming.should.equal("quantity");
+            context.previous.message[0].message.text.should.equal(await t.t("sorry_we_do_not_have_x", { item_label: "iPad" }))
         })
     })
 })

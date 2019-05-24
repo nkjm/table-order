@@ -55,6 +55,9 @@ module.exports = class SkillFaqRecommendation {
             type: "text",
             text: await bot.t(`our_recommendation_is_x`, { item_label: recommended_item.label }),
         }
+
+        // If this is sub_skill, quick reply returns item label only to apply to label parameter. 
+        // If this is parent skill, quick reply return sentence to launch order skill.
         message = await bot.m.qr_push_item(message, {
             type: "action",
             action: {

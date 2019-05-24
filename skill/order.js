@@ -52,7 +52,7 @@ module.exports = class SkillOrder {
                             }
                             return parsed_value;
                         },
-                        sub_skill: ["faq_is_hot", "faq_recommendation"]
+                        sub_skill: ["faq_is_hot", "faq_recommendation", "faq_search_item"]
                     },
                     quantity: {
                         message: async (bot, event, context) => {

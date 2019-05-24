@@ -1,6 +1,26 @@
 "use strict";
 
 module.exports = {
+    yes_we_have_x: {
+        ja: (options) => {
+            return `はい、${options.item_label}はございます。`
+        },
+        en: (options) => {
+            return `Yes, we have ${options.item_label}.`
+        } 
+    },
+    sorry_we_do_not_have_x: {
+        ja: (options) => {
+            return `申し訳ありません、${options.item_label}はございません。`
+        },
+        en: (options) => {
+            return `We're sorry but we do not have ${options.item_label}.`
+        } 
+    },
+    pls_tell_me_item_you_are_looking_for: {
+        ja: `お探しのメニューをおしえていただけますか？`,
+        en: `Could you tell me what you're looking for?`
+    },
     sorry_we_have_no_recommendation_for_you: {
         ja: `申し訳ありません、ご要望に合うお料理がございませんでした。`,
         en: `We're sorry but we do not have suitable proposal for you.`
