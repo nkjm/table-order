@@ -1,6 +1,50 @@
 "use strict";
 
 module.exports = {
+    sorry_we_have_no_recommendation_for_you: {
+        ja: `申し訳ありません、ご要望に合うお料理がございませんでした。`,
+        en: `We're sorry but we do not have suitable proposal for you.`
+    },
+    order_x: {
+        ja: (options) => {
+            return `${options.item_label}を注文`
+        },
+        en: (options) => {
+            return `Order ${options.item_label}`
+        }
+    },
+    our_recommendation_is_x: {
+        ja: (options) => {
+            return `お薦めは${options.item_label}です。`
+        },
+        en: (options) => {
+            return `Then our recommendation is ${options.item_label}.`
+        }
+    },
+    which_ingredients_do_you_like: {
+        ja: "お野菜、お肉でお好みはございますか？",
+        en: "Which do you like vegetables or meats?"
+    },
+    vegetable: {
+        ja: "野菜",
+        en: "Vegetables"
+    },
+    chicken: {
+        ja: "鶏肉",
+        en: "Chicken"
+    },
+    pork: {
+        ja: "豚肉",
+        en: "Pork"
+    },
+    beef: {
+        ja: "牛肉",
+        en: "Beef"
+    },
+    seafood: {
+        ja: "魚介",
+        en: "Sea food"
+    },
     no_answer_for_a_while_so_we_quit_this_order_for_now: {
         ja: `しばらく時間が経ちましたので、一旦オーダーは中止しておきますね。`,
         en: `We quit this order for now.`
