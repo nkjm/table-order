@@ -7,14 +7,10 @@ const translate = require("../service/translate");
 
 module.exports = class SkillOrder {
     constructor(){
-        /**
-         * If set to true, context will be cleared when skill finishes.
-         */
+        // If set to true, context will be cleared when skill finishes.
         this.clear_context_on_finish = true;
 
-        /**
-         * Required parametes to finish this skill.
-         */
+        // Required parametes to finish this skill.
         this.required_parameter = {
             order_item_list: {
                 list: {
@@ -31,12 +27,10 @@ module.exports = class SkillOrder {
                             // Add quit button.
                             order_item_message = await bot.m.qr_add_quit(order_item_message);
 
-                            let message_list = [{
+                            return [{
                                 type: "text",
                                 text: await bot.t(`pls_select_order`)
                             }, order_item_message];
-
-                            return message_list;
                         },
                         parser: async (value, bot, event, context) => {
                             const label_type_list = Array.from(context.global.menu_list, menu => menu.label);
@@ -65,9 +59,7 @@ module.exports = class SkillOrder {
 
                             return message;
                         },
-                        parser: {
-                            type: "number"
-                        }
+                        parser: "number"
                     }
                 },
                 reaction: async (error, value, bot, event, context) => {
@@ -97,14 +89,13 @@ module.exports = class SkillOrder {
             review_order_item_list: {
                 message: async (bot, event, context) => {
                     let message;
+                    // Check if we have some order items in list.
                     if (context.confirmed.order_item_list.length > 0){
-                        // We have some order items.
                         message = await bot.m.review_order_item_list(context.confirmed.order_item_list);
 
                         // Add quit button.
                         message = await bot.m.qr_add_quit(message);
                     } else {
-                        // order item list is emply.
                         message = await bot.m.multi_button({
                             message_text: `${await bot.t("there_is_no_order")} ${await bot.t("do_you_add_order")}`,
                             action_list: [{
@@ -126,22 +117,10 @@ module.exports = class SkillOrder {
                     })
                 },
                 reaction: async (error, value, bot, event, context) => {
-                    if (error){
-                        // Check if user answer order item.
-                        try {
-                            const parsed_value = await bot.builtin_parser.dialogflow.parse(value, {
-                                parameter_name: "order_item_label"
-                            })
-                            bot.collect("order_item_list");
-                            context.heard.label = parsed_value;
-                        } catch(e){
-                            // It was not order item so just return.
-                        }
-                        return
-                    }
+                    if (error) return;
 
                     if (value == await bot.t(`remove`)){
-                        // Ask item to remove.
+                        // Ask item to remove as long as order_item_list has items.
                         if (!(Array.isArray(context.confirmed.order_item_list) && context.confirmed.order_item_list.length > 0)){
                             bot.collect("review_order_item_list");
                             return
@@ -153,14 +132,13 @@ module.exports = class SkillOrder {
                         bot.collect("review_order_item_list");
                         bot.collect("order_item_list");
                     } else if (value == await bot.t(`check`)){
-                        // Proceed as long as order_item_list is set.
+                        // Proceed as long as order_item_list has items.
                         if (!(Array.isArray(context.confirmed.order_item_list) && context.confirmed.order_item_list.length > 0)){
                             bot.collect("review_order_item_list");
                             return
                         }
                     }
-                },
-                sub_skill: ["faq_recommendation", "faq_search_item"]
+                }
             }
         }
 

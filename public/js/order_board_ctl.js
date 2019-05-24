@@ -140,23 +140,6 @@ angular.module("botex-table-order")
         firebase.auth().onAuthStateChanged(
             function(user) {
                 if (user) {
-                    /*
-                    console.log(user);
-                    // User is signed in.
-                    var displayName = user.displayName;
-                    var email = user.email;
-                    var emailVerified = user.emailVerified;
-                    var photoURL = user.photoURL;
-                    var uid = user.uid;
-                    var phoneNumber = user.phoneNumber;
-                    var providerData = user.providerData;
-                    user.getIdToken().then(
-                        function(access_token) {
-                            console.log("access_token: " + access_token);
-                            $scope.state.access_token = access_token;
-                        }
-                    );
-                    */
                     $scope.get_order_list();
                 } else {
                     console.log("User has not singed in.");
