@@ -57,7 +57,7 @@ module.exports = class SkillFaqRecommendation {
         }
         message = await bot.m.qr_push_item(message, {
             type: "action",
-            aciton: {
+            action: {
                 type: "message",
                 label: await bot.t("order_x", { item_label: recommended_item.label }),
                 text: recommended_item.label
