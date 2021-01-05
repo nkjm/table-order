@@ -12,7 +12,7 @@
     "node": "8"
   },
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "bluebird": "^3.5.4",
     "debug": "^4.1.1",
     "firebase-admin": "~7.0.0",
