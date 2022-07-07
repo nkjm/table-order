@@ -23,7 +23,7 @@
     "firebase-admin": "^7.4.0",
     "ioredis": "^4.9.3",
     "line-pay": "^1.0.15",
-    "moment": "^2.22.2",
+    "moment": "^2.29.4",
     "secure-compare": "^3.0.1",
     "stripe": "^6.34.0"
   },
