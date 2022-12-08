@@ -19,7 +19,7 @@
     "dialogflow": "^0.9.1",
     "dotenv": "^6.0.0",
     "ejs": "^2.6.1",
-    "express": "^4.16.3",
+    "express": "^4.17.3",
     "firebase-admin": "^7.4.0",
     "ioredis": "^4.9.3",
     "line-pay": "^1.0.15",
